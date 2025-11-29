@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertProjectSchema, insertContactSchema } from "@shared/schema";
 import { z } from "zod";
+import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -91,6 +92,57 @@ export async function registerRoutes(
       res.json(contacts);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch contacts" });
+    }
+  });
+
+  // Stripe billing portal
+  // NOTE: In production, this endpoint should require authentication and use the
+  // authenticated user's stripeCustomerId from the users table
+  app.post("/api/stripe/billing-portal", async (req, res) => {
+    try {
+      const stripe = await getUncachableStripeClient();
+      const { email } = req.body;
+      
+      // Look up customer by email - in production, use authenticated user's stripeCustomerId
+      let customerId: string | undefined;
+      
+      if (email) {
+        const customers = await stripe.customers.list({ email, limit: 1 });
+        if (customers.data.length > 0) {
+          customerId = customers.data[0].id;
+        }
+      }
+      
+      // If no customer found, create one with the provided email
+      if (!customerId) {
+        const customer = await stripe.customers.create({
+          email: email || "demo@mannasolutions.com",
+          name: "Manna Solutions User",
+        });
+        customerId = customer.id;
+      }
+
+      const returnUrl = req.headers.origin || `https://${req.get('host')}`;
+      
+      const session = await stripe.billingPortal.sessions.create({
+        customer: customerId,
+        return_url: `${returnUrl}/dashboard/settings`,
+      });
+
+      res.json({ url: session.url });
+    } catch (error: any) {
+      console.error("Billing portal error:", error);
+      res.status(500).json({ message: "Failed to create billing portal session" });
+    }
+  });
+
+  // Get Stripe publishable key for frontend
+  app.get("/api/stripe/config", async (req, res) => {
+    try {
+      const publishableKey = await getStripePublishableKey();
+      res.json({ publishableKey });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to get Stripe config" });
     }
   });
 
