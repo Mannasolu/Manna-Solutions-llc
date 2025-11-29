@@ -2,12 +2,14 @@ import { Layout } from "@/components/layout/Layout";
 import { team } from "@/lib/data";
 import ceoImg from "@assets/DSC08795-1_1764430788706.JPG";
 import dsImg from "@assets/generated_images/data_scientist_headshot.png";
+import sarahImg from "@assets/generated_images/professional_woman_headshot_portrait.png";
 import officeImg from "@assets/generated_images/modern_office_interior.png";
 
 export default function About() {
   const getImage = (key: string) => {
     if (key.includes("CEO")) return ceoImg;
     if (key.includes("Data Scientist")) return dsImg;
+    if (key.includes("Office")) return sarahImg;
     return officeImg;
   };
 
