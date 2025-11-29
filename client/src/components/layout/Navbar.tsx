@@ -23,7 +23,7 @@ export function Navbar() {
           <a className="flex items-center gap-3">
             <img src={logo} alt="Manna Solutions LLC" className="h-10 w-10 rounded-lg shrink-0" />
             <span className="text-xl font-heading font-bold tracking-tight text-white whitespace-nowrap">
-              Manna<span className="text-primary">Solutions</span>
+              Manna <span className="text-primary">Solutions</span>
             </span>
           </a>
         </Link>

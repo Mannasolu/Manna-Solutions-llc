@@ -11,7 +11,7 @@ export function Footer() {
               <a className="flex items-center gap-3 mb-4">
                 <img src={logo} alt="Manna Solutions LLC" className="h-8 w-8 rounded-md grayscale opacity-80" />
                 <span className="text-lg font-heading font-bold text-white">
-                  Manna<span className="text-primary">Solutions</span>
+                  Manna <span className="text-primary">Solutions</span>
                 </span>
               </a>
             </Link>

@@ -29,7 +29,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             <a className="flex items-center gap-3">
               <img src={logo} alt="Manna Solutions LLC" className="h-8 w-8 rounded-md" />
               <span className="font-heading font-bold text-lg text-white">
-                Manna<span className="text-primary">Solutions</span>
+                Manna <span className="text-primary">Solutions</span>
               </span>
             </a>
           </Link>
