@@ -6,18 +6,44 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Mail, MapPin, Phone } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useToast } from "@/hooks/use-toast";
+import { useMutation } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
+import { useState } from "react";
 
 export default function Contact() {
   const { register, handleSubmit, reset } = useForm();
   const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const onSubmit = (data: any) => {
-    console.log(data);
-    toast({
-      title: "Message Sent",
-      description: "We'll get back to you shortly.",
-    });
-    reset();
+  const mutation = useMutation({
+    mutationFn: async (data: any) => {
+      const res = await apiRequest("POST", "/api/contacts", {
+        name: `${data.firstName} ${data.lastName}`,
+        email: data.email,
+        message: data.message,
+      });
+      return res.json();
+    },
+  });
+
+  const onSubmit = async (data: any) => {
+    try {
+      setIsSubmitting(true);
+      await mutation.mutateAsync(data);
+      toast({
+        title: "Message Sent",
+        description: "We'll get back to you shortly.",
+      });
+      reset();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -98,7 +124,7 @@ export default function Contact() {
                   <Textarea {...register("message")} placeholder="Tell us about your project needs..." className="min-h-[150px] bg-background/50 border-white/10" />
                 </div>
 
-                <Button type="submit" className="w-full">Send Message</Button>
+                <Button type="submit" className="w-full" disabled={isSubmitting}>{isSubmitting ? "Sending..." : "Send Message"}</Button>
               </form>
             </CardContent>
           </Card>

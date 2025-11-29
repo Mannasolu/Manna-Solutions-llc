@@ -1,11 +1,19 @@
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { projects, stats } from "@/lib/data";
-import { ArrowUpRight, Calendar, Clock, MoreHorizontal } from "lucide-react";
+import { stats } from "@/lib/data";
+import { ArrowUpRight, Calendar, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { useQuery } from "@tanstack/react-query";
+import { getQueryFn } from "@/lib/queryClient";
+import type { Project } from "@shared/schema";
 
 export default function Dashboard() {
+  const { data: projects = [], isLoading } = useQuery<Project[]>({
+    queryKey: ["/api/projects"],
+    queryFn: getQueryFn({ on401: "throw" }),
+  });
+
   return (
     <DashboardLayout>
       <div className="mb-8">
@@ -42,40 +50,46 @@ export default function Dashboard() {
           </div>
 
           <div className="space-y-4">
-            {projects.map((project) => (
-              <Card key={project.id} className="bg-card border-border hover:border-primary/30 transition-colors">
-                <CardContent className="p-6">
-                  <div className="flex justify-between items-start mb-4">
-                    <div>
-                      <h4 className="font-bold text-white text-lg mb-1">{project.name}</h4>
-                      <p className="text-sm text-muted-foreground">{project.client}</p>
+            {isLoading ? (
+              <div className="text-muted-foreground">Loading projects...</div>
+            ) : projects.length === 0 ? (
+              <div className="text-muted-foreground">No projects yet</div>
+            ) : (
+              projects.map((project) => (
+                <Card key={project.id} className="bg-card border-border hover:border-primary/30 transition-colors">
+                  <CardContent className="p-6">
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <h4 className="font-bold text-white text-lg mb-1">{project.name}</h4>
+                        <p className="text-sm text-muted-foreground">{project.client}</p>
+                      </div>
+                      <span className={`px-3 py-1 rounded-full text-xs font-medium border ${
+                        project.status === "Active" ? "bg-primary/10 text-primary border-primary/20" :
+                        project.status === "Completed" ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" :
+                        "bg-yellow-500/10 text-yellow-500 border-yellow-500/20"
+                      }`}>
+                        {project.status}
+                      </span>
                     </div>
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium border ${
-                      project.status === "Active" ? "bg-primary/10 text-primary border-primary/20" :
-                      project.status === "Completed" ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" :
-                      "bg-yellow-500/10 text-yellow-500 border-yellow-500/20"
-                    }`}>
-                      {project.status}
-                    </span>
-                  </div>
-                  
-                  <p className="text-sm text-muted-foreground mb-6">
-                    {project.description}
-                  </p>
+                    
+                    <p className="text-sm text-muted-foreground mb-6">
+                      {project.description}
+                    </p>
 
-                  <div className="flex items-center justify-between text-sm">
-                    <div className="flex items-center gap-4 text-muted-foreground">
-                      <span className="flex items-center gap-1"><Calendar className="h-4 w-4" /> {project.dueDate}</span>
-                      <span className="flex items-center gap-1"><Clock className="h-4 w-4" /> 2 days left</span>
+                    <div className="flex items-center justify-between text-sm">
+                      <div className="flex items-center gap-4 text-muted-foreground">
+                        <span className="flex items-center gap-1"><Calendar className="h-4 w-4" /> {project.dueDate}</span>
+                        <span className="flex items-center gap-1"><Clock className="h-4 w-4" /> 2 days left</span>
+                      </div>
+                      <div className="flex items-center gap-2 w-1/3">
+                        <span className="text-xs text-white">{project.progress}%</span>
+                        <Progress value={project.progress} className="h-2" />
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2 w-1/3">
-                      <span className="text-xs text-white">{project.progress}%</span>
-                      <Progress value={project.progress} className="h-2" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                  </CardContent>
+                </Card>
+              ))
+            )}
           </div>
         </div>
 
