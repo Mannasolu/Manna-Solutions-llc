@@ -8,12 +8,12 @@ export function Footer() {
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           <div className="col-span-1 md:col-span-2">
             <Link href="/">
-              <a className="flex items-center gap-3 mb-4">
+              <div className="flex items-center gap-3 mb-4 cursor-pointer">
                 <img src={logo} alt="Manna Solutions LLC" className="h-8 w-8 rounded-md grayscale opacity-80" />
                 <span className="text-lg font-heading font-bold text-white">
                   Manna <span className="text-primary">Solutions</span>
                 </span>
-              </a>
+              </div>
             </Link>
             <p className="text-muted-foreground text-sm max-w-md">
               Delivering custom artificial intelligence and machine learning solutions to automate, optimize, and scale complex decision-making processes.
@@ -23,11 +23,11 @@ export function Footer() {
           <div>
             <h4 className="font-bold text-white mb-4">Quick Links</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link href="/solutions"><a className="hover:text-primary">Solutions</a></Link></li>
-              <li><Link href="/about"><a className="hover:text-primary">About Us</a></Link></li>
-              <li><Link href="/blog"><a className="hover:text-primary">Insights</a></Link></li>
-              <li><Link href="/contact"><a className="hover:text-primary">Contact</a></Link></li>
-              <li><Link href="/login"><a className="hover:text-primary">Client Portal</a></Link></li>
+              <li><Link href="/solutions"><span className="hover:text-primary cursor-pointer">Solutions</span></Link></li>
+              <li><Link href="/about"><span className="hover:text-primary cursor-pointer">About Us</span></Link></li>
+              <li><Link href="/blog"><span className="hover:text-primary cursor-pointer">Insights</span></Link></li>
+              <li><Link href="/contact"><span className="hover:text-primary cursor-pointer">Contact</span></Link></li>
+              <li><Link href="/login"><span className="hover:text-primary cursor-pointer">Client Portal</span></Link></li>
             </ul>
           </div>
           
