@@ -1,0 +1,46 @@
+"Develop a full-stack web application and a responsive marketing website for an AI/ML solutions company called 'CogniSolve AI'.
+
+**Website Requirements:**
+1.  **Homepage:**
+    *   Catchy headline: "Unlocking the Future with Intelligent AI/ML Solutions."
+    *   Brief description of CogniSolve AI's mission and expertise.
+    *   Clear call-to-action (e.g., "Explore Our Solutions," "Request a Demo").
+    *   Visually appealing design with modern aesthetics and a professional color scheme (e.g., blues, grays, and a touch of green).
+    *   Hero section with a dynamic visual representing AI/ML.
+2.  **Solutions Page:**
+    *   Detailed descriptions of core AI/ML services (e.g., Predictive Analytics, Natural Language Processing, Computer Vision, Custom AI Model Development).
+    *   Use case examples for each solution.
+    *   Integration of relevant icons or small graphics for each solution.
+3.  **About Us Page:**
+    *   Company history and vision.
+    *   Meet the Team section with placeholder images and brief bios for key personnel.
+    *   Emphasis on expertise and innovation.
+4.  **Contact Us Page:**
+    *   Contact form for inquiries (Name, Email, Subject, Message).
+    *   Company address, phone number, and email.
+    *   Optional: Embedded map showing office location.
+5.  **Blog Section:**
+    *   Placeholder for blog posts related to AI/ML trends and insights.
+    *   Basic structure for displaying articles (title, author, date, summary).
+6.  **Responsive Design:** Ensure the website is fully responsive and optimized for desktop, tablet, and mobile devices.
+
+**Web Application Requirements (Client Portal):**
+1.  **User Authentication:** Secure login/registration system for clients.
+2.  **Dashboard:**
+    *   Overview of active projects.
+    *   Quick access to project details and status updates.
+    *   Notifications for new updates or actions required.
+3.  **Project Management:**
+    *   Ability to view individual project details (scope, timeline, team members).
+    *   Secure document sharing for project-related files.
+    *   Communication portal for client-team interaction (simple messaging system).
+4.  **Reporting:**
+    *   Placeholder for basic project progress reports or analytics.
+5.  **Technology Stack:** Suggest a suitable modern web framework (e.g., React/Next.js for frontend, Node.js/Express or Python/Flask for backend) and a database (e.g., PostgreSQL).
+6.  **Security:** Implement basic security measures for user data and application access.
+
+**General Instructions:**
+*   Prioritize clean, well-structured code.
+*   Include comments where necessary for clarity.
+*   Generate placeholder content for all sections.
+*   Ensure a cohesive brand identity between the website and the web application."
