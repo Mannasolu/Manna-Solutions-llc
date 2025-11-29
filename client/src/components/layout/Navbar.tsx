@@ -21,12 +21,12 @@ export function Navbar() {
       <div className="container mx-auto px-6 h-20 flex items-center justify-between">
         {/* Left Side: Logo */}
         <Link href="/">
-          <a className="flex items-center gap-3 flex-shrink-0 mr-4">
+          <div className="flex items-center gap-3 flex-shrink-0 mr-4 cursor-pointer">
             <img src={logo} alt="Manna Solutions LLC" className="h-10 w-10 rounded-lg shrink-0" />
             <span className="text-xl font-heading font-bold tracking-tight text-white whitespace-nowrap">
               Manna <span className="text-primary">Solutions</span>
             </span>
-          </a>
+          </div>
         </Link>
 
         {/* Center: Navigation Links (Hidden on Mobile) */}
@@ -34,11 +34,11 @@ export function Navbar() {
         <div className="hidden md:flex flex-1 justify-center items-center gap-6 lg:gap-8 mx-4">
           {links.map((link) => (
             <Link key={link.href} href={link.href}>
-              <a className={`text-sm font-medium transition-colors hover:text-primary whitespace-nowrap ${
+              <span className={`text-sm font-medium transition-colors hover:text-primary whitespace-nowrap cursor-pointer ${
                 location === link.href ? "text-primary" : "text-muted-foreground"
               }`}>
                 {link.label}
-              </a>
+              </span>
             </Link>
           ))}
         </div>
@@ -47,7 +47,7 @@ export function Navbar() {
         <div className="flex items-center gap-4 flex-shrink-0">
           <div className="hidden md:block">
             <Link href="/login">
-              <Button variant="default" size="sm" className="gap-2">
+              <Button variant="default" size="sm" className="gap-2 cursor-pointer">
                 Client Portal <ChevronRight className="h-4 w-4" />
               </Button>
             </Link>
@@ -65,16 +65,16 @@ export function Navbar() {
         <div className="md:hidden bg-background border-b border-border p-6 space-y-4">
           {links.map((link) => (
             <Link key={link.href} href={link.href}>
-              <a 
-                className="block text-lg font-medium text-foreground hover:text-primary"
+              <span 
+                className="block text-lg font-medium text-foreground hover:text-primary cursor-pointer"
                 onClick={() => setIsOpen(false)}
               >
                 {link.label}
-              </a>
+              </span>
             </Link>
           ))}
           <Link href="/login">
-            <Button className="w-full mt-4">Client Portal</Button>
+            <Button className="w-full mt-4 cursor-pointer">Client Portal</Button>
           </Link>
         </div>
       )}

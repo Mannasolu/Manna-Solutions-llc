@@ -1,6 +1,6 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
-import * as schema from "@shared/schema";
+import * as schema from "./shared/schema";
 
 const client = postgres(process.env.DATABASE_URL!);
 const db = drizzle(client, { schema });
@@ -34,6 +34,57 @@ async function seed() {
       description: "Computer vision system for defect detection on the assembly line using edge computing."
     }
   ]);
+
+  // Seed Trucker Expense Tracking Subscription Tiers with 300% markup
+  // Formula: finalPrice = baseCost * (1 + 3.0) = baseCost * 4
+  const subscriptionTiers = [
+    {
+      name: "Basic",
+      description: "Essential expense tracking for truckers",
+      baseCostPerMonth: "29.00",
+      markupPercentage: "300",
+      finalPricePerMonth: "116.00", // 29 * 4
+      features: ["Mileage tracking", "Fuel expense logs", "Basic reporting"],
+      order: 1,
+    },
+    {
+      name: "Professional",
+      description: "Comprehensive expense management",
+      baseCostPerMonth: "59.00",
+      markupPercentage: "300",
+      finalPricePerMonth: "236.00", // 59 * 4
+      features: [
+        "Mileage tracking",
+        "Fuel expense logs",
+        "Maintenance tracking",
+        "Food/meal expenses",
+        "Advanced reporting",
+        "Monthly summaries",
+      ],
+      order: 2,
+    },
+    {
+      name: "Enterprise",
+      description: "Complete solution with documentation",
+      baseCostPerMonth: "99.00",
+      markupPercentage: "300",
+      finalPricePerMonth: "396.00", // 99 * 4
+      features: [
+        "Mileage tracking",
+        "Fuel expense logs",
+        "Maintenance tracking",
+        "Food/meal expenses",
+        "Paperwork/documentation",
+        "Advanced reporting",
+        "Monthly summaries",
+        "Priority support",
+        "Custom integrations",
+      ],
+      order: 3,
+    },
+  ];
+
+  await db.insert(schema.subscriptionTiers).values(subscriptionTiers);
 
   console.log("✓ Database seeded successfully");
   process.exit(0);

@@ -13,6 +13,13 @@ import Dashboard from "@/pages/Dashboard";
 import Settings from "@/pages/Settings";
 import Consultations from "@/pages/Consultations";
 import Blog from "@/pages/Blog";
+import TruckerDashboard from "@/pages/dashboard/TruckerDashboard";
+import MileageTracking from "@/pages/dashboard/MileageTracking";
+import FuelExpenses from "@/pages/dashboard/FuelExpenses";
+import MaintenanceTracking from "@/pages/dashboard/MaintenanceTracking";
+import FoodExpenses from "@/pages/dashboard/FoodExpenses";
+import PaperworkManagement from "@/pages/dashboard/PaperworkManagement";
+import SubscriptionManagement from "@/pages/dashboard/SubscriptionManagement";
 
 function Router() {
   return (
@@ -23,10 +30,15 @@ function Router() {
       <Route path="/blog" component={Blog} />
       <Route path="/contact" component={Contact} />
       <Route path="/login" component={Login} />
-      <Route path="/dashboard" component={Dashboard} />
+      <Route path="/dashboard" component={TruckerDashboard} />
+      <Route path="/dashboard/mileage" component={MileageTracking} />
+      <Route path="/dashboard/fuel" component={FuelExpenses} />
+      <Route path="/dashboard/maintenance" component={MaintenanceTracking} />
+      <Route path="/dashboard/food" component={FoodExpenses} />
+      <Route path="/dashboard/paperwork" component={PaperworkManagement} />
+      <Route path="/dashboard/subscription" component={SubscriptionManagement} />
       <Route path="/dashboard/settings" component={Settings} />
       <Route path="/dashboard/consultations" component={Consultations} />
-      <Route path="/dashboard/:any*" component={Dashboard} />
       <Route component={NotFound} />
     </Switch>
   );
