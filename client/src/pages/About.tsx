@@ -55,13 +55,13 @@ export default function About() {
 
           <div className="grid md:grid-cols-3 gap-8">
             {team.map((member, i) => (
-              <div key={i} className="bg-card border border-border p-6 rounded-2xl text-center hover:border-primary/50 transition-colors group">
-                <div className="mb-6 relative inline-block">
+              <div key={i} className={`bg-card border border-border p-6 rounded-2xl hover:border-primary/50 transition-colors group ${i === 0 ? "text-right" : "text-center"}`}>
+                <div className={`mb-6 relative inline-block ${i === 0 ? "float-right" : ""}`}>
                   <div className="absolute inset-0 bg-gradient-to-b from-primary/20 to-transparent rounded-full blur-md opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   <img 
                     src={getImage(member.image)} 
                     alt={member.name} 
-                    className="h-32 w-32 rounded-full object-cover border-2 border-white/10 relative z-10 mx-auto"
+                    className="h-32 w-32 rounded-full object-cover border-2 border-white/10 relative z-10"
                   />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-1">{member.name}</h3>
