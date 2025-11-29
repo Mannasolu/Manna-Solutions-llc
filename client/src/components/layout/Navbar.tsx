@@ -18,9 +18,9 @@ export function Navbar() {
 
   return (
     <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-lg border-b border-border">
-      <div className="container mx-auto px-6 h-20 flex items-center justify-between">
+      <div className="container mx-auto px-6 h-20 flex items-center justify-between relative">
         <Link href="/">
-          <a className="flex items-center gap-3">
+          <a className="flex items-center gap-3 z-10">
             <img src={logo} alt="Manna Solutions LLC" className="h-10 w-10 rounded-lg shrink-0" />
             <span className="text-xl font-heading font-bold tracking-tight text-white whitespace-nowrap">
               Manna <span className="text-primary">Solutions</span>
@@ -28,8 +28,8 @@ export function Navbar() {
           </a>
         </Link>
 
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8">
+        {/* Desktop Nav - Centered */}
+        <div className="hidden md:flex items-center gap-8 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
           {links.map((link) => (
             <Link key={link.href} href={link.href}>
               <a className={`text-sm font-medium transition-colors hover:text-primary ${
@@ -39,17 +39,23 @@ export function Navbar() {
               </a>
             </Link>
           ))}
-          <Link href="/login">
-            <Button variant="default" size="sm" className="gap-2">
-              Client Portal <ChevronRight className="h-4 w-4" />
-            </Button>
-          </Link>
         </div>
 
-        {/* Mobile Toggle */}
-        <button className="md:hidden text-foreground" onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? <X /> : <Menu />}
-        </button>
+        {/* Right Side Actions */}
+        <div className="flex items-center gap-4 z-10">
+          <div className="hidden md:block">
+            <Link href="/login">
+              <Button variant="default" size="sm" className="gap-2">
+                Client Portal <ChevronRight className="h-4 w-4" />
+              </Button>
+            </Link>
+          </div>
+
+          {/* Mobile Toggle */}
+          <button className="md:hidden text-foreground" onClick={() => setIsOpen(!isOpen)}>
+            {isOpen ? <X /> : <Menu />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
