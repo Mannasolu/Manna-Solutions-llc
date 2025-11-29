@@ -37,6 +37,7 @@ Preferred communication style: Simple, everyday language.
 **Key Routes**:
 - `/api/projects` - CRUD operations for project management
 - `/api/contacts` - Contact form submissions
+- `/api/demo-requests` - Demo request submissions and retrieval
 - `/api/stripe/*` - Stripe integration endpoints (webhook, billing portal, checkout)
 
 **Design Decisions**:
@@ -53,6 +54,7 @@ Preferred communication style: Simple, everyday language.
   - `users` - Authentication (username/password) with Stripe customer linking
   - `projects` - Project tracking with status, progress, due dates
   - `contacts` - Contact form inquiries
+  - `demo_requests` - Demo request submissions with company details, timeline, budget, challenges, and notes
   - Stripe sync tables (managed by `stripe-replit-sync` package)
 
 **Design Decisions**:
@@ -100,3 +102,28 @@ Preferred communication style: Simple, everyday language.
 - **Drizzle Kit** - Database migration management
 
 **Design Rationale for Stripe Integration**: The application uses `stripe-replit-sync` to automatically manage database schema for Stripe data synchronization, reducing manual webhook handling complexity. Managed webhooks ensure reliability across deployments.
+
+## Feature: Demo Request Funnel
+
+**Overview**: Intelligent two-step funnel on the Contact page that captures detailed demo requests vs general consultations.
+
+**Components**:
+- `DemoFunnel.tsx` - Main funnel component with choice selection and form
+- Contact page displays funnel initially, switches to consultation form when "General Inquiry" is selected
+
+**Flow**:
+1. **Choice Step** - User selects between "Request a Demo" or "General Inquiry"
+2. **Demo Form** (if Demo selected) - Collects:
+   - Personal info: firstName, lastName, email
+   - Company info: company name, job title, industry, company size
+   - Needs: timeline, budget range
+   - Context: challenges facing, additional notes
+3. **Consultation Form** (if General Inquiry selected) - Standard contact form
+
+**Management Dashboard**:
+- Tabbed interface in Consultations page
+- **Consultations Tab** - General inquiries with search/filter
+- **Demo Requests Tab** - Detailed demo requests organized by industry, company size, timeline, budget
+- Each demo request displays all collected information in organized cards
+
+**Database**: Separate `demo_requests` table maintains data integrity and enables targeted management
