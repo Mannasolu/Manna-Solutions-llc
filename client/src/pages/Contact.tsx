@@ -67,7 +67,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <h3 className="font-bold text-white mb-1">Headquarters</h3>
-                  <p className="text-muted-foreground">7019 River Garden Dr<br/>Houston, TX 77095</p>
+                  <p className="text-muted-foreground">15821 Fm 529<br/>Houston, Texas 77095</p>
                 </div>
               </div>
 
