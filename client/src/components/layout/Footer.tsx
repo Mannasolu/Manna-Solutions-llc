@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import logo from "@assets/generated_images/manna_solutions_logo.png";
+import logo from "@assets/logo_1764423796982.jpeg";
 
 export function Footer() {
   return (

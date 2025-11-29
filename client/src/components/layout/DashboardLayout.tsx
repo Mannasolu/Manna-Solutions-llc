@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 import { LayoutDashboard, FolderKanban, FileText, Settings, LogOut, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import logo from "@assets/generated_images/manna_solutions_logo.png";
+import logo from "@assets/logo_1764423796982.jpeg";
 import ceoImg from "@assets/generated_images/ceo_headshot.png";
 
 interface DashboardLayoutProps {

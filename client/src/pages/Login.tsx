@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useLocation } from "wouter";
-import logo from "@assets/generated_images/manna_solutions_logo.png";
+import logo from "@assets/logo_1764423796982.jpeg";
 import heroBg from "@assets/generated_images/ai_neural_network_hero_background.png";
 
 export default function Login() {
