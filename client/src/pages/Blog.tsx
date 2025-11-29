@@ -3,7 +3,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Calendar, User } from "lucide-react";
-import ceoImg from "@assets/generated_images/ceo_headshot.png";
+import ceoImg from "@assets/DSC08797-1_1764429137126.JPG";
 import dsImg from "@assets/generated_images/data_scientist_headshot.png";
 import analyticsImg from "@assets/generated_images/predictive_analytics_visualization.png";
 

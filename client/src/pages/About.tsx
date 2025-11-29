@@ -1,6 +1,6 @@
 import { Layout } from "@/components/layout/Layout";
 import { team } from "@/lib/data";
-import ceoImg from "@assets/generated_images/ceo_headshot.png";
+import ceoImg from "@assets/DSC08797-1_1764429137126.JPG";
 import dsImg from "@assets/generated_images/data_scientist_headshot.png";
 import officeImg from "@assets/generated_images/modern_office_interior.png";
 

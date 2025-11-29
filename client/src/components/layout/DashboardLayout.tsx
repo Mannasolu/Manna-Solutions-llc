@@ -4,7 +4,7 @@ import { LayoutDashboard, FolderKanban, FileText, Settings, LogOut, Bell } from 
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import logo from "@assets/logo_1764423796982.jpeg";
-import ceoImg from "@assets/generated_images/ceo_headshot.png";
+import ceoImg from "@assets/DSC08797-1_1764429137126.JPG";
 
 interface DashboardLayoutProps {
   children: ReactNode;
