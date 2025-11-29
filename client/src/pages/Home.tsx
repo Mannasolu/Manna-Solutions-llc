@@ -33,7 +33,7 @@ export default function Home() {
           </h1>
           
           <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300">
-            CogniSolve AI delivers custom artificial intelligence and machine learning solutions to automate, optimize, and scale complex decision-making processes.
+            Manna Solutions LLC delivers custom artificial intelligence and machine learning solutions to automate, optimize, and scale complex decision-making processes.
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-400">

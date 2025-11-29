@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import logo from "@assets/generated_images/cognisolve_ai_logo.png";
+import logo from "@assets/generated_images/manna_solutions_logo.png";
 
 export function Footer() {
   return (
@@ -9,9 +9,9 @@ export function Footer() {
           <div className="col-span-1 md:col-span-2">
             <Link href="/">
               <a className="flex items-center gap-3 mb-4">
-                <img src={logo} alt="CogniSolve AI" className="h-8 w-8 rounded-md grayscale opacity-80" />
+                <img src={logo} alt="Manna Solutions LLC" className="h-8 w-8 rounded-md grayscale opacity-80" />
                 <span className="text-lg font-heading font-bold text-white">
-                  CogniSolve<span className="text-primary">AI</span>
+                  Manna<span className="text-primary">Solutions</span>
                 </span>
               </a>
             </Link>
@@ -43,7 +43,7 @@ export function Footer() {
         </div>
         
         <div className="pt-8 border-t border-white/5 text-center text-xs text-muted-foreground">
-          &copy; {new Date().getFullYear()} CogniSolve AI. All rights reserved.
+          &copy; {new Date().getFullYear()} Manna Solutions LLC. All rights reserved.
         </div>
       </div>
     </footer>

@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 import { LayoutDashboard, FolderKanban, FileText, Settings, LogOut, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import logo from "@assets/generated_images/cognisolve_ai_logo.png";
+import logo from "@assets/generated_images/manna_solutions_logo.png";
 import ceoImg from "@assets/generated_images/ceo_headshot.png";
 
 interface DashboardLayoutProps {
@@ -27,9 +27,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         <div className="p-6">
           <Link href="/">
             <a className="flex items-center gap-3">
-              <img src={logo} alt="CogniSolve AI" className="h-8 w-8 rounded-md" />
+              <img src={logo} alt="Manna Solutions LLC" className="h-8 w-8 rounded-md" />
               <span className="font-heading font-bold text-lg text-white">
-                CogniSolve<span className="text-primary">AI</span>
+                Manna<span className="text-primary">Solutions</span>
               </span>
             </a>
           </Link>

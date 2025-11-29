@@ -52,7 +52,7 @@ export default function Blog() {
             Insights & <span className="text-gradient">News</span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Latest trends, thoughts, and updates from the CogniSolve team.
+            Latest trends, thoughts, and updates from the Manna Solutions team.
           </p>
         </div>
       </div>

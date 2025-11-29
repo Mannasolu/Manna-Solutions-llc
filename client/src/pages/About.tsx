@@ -23,7 +23,7 @@ export default function About() {
               </h1>
               <div className="space-y-6 text-lg text-muted-foreground">
                 <p>
-                  Founded by UT Business School–trained technologist Amani Latson, CogniSolve AI merges deep technical skill with business fluency.
+                  Founded by UT Business School–trained technologist Amani Latson, Manna Solutions LLC merges deep technical skill with business fluency.
                 </p>
                 <p>
                   We don't just build models; we craft machine learning systems that are explainable, ethical, and ROI-driven. Our mission is to democratize access to advanced AI technologies for businesses ready to scale.

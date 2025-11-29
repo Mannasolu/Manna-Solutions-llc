@@ -2,7 +2,7 @@ import { Link, useLocation } from "wouter";
 import { Menu, X, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import logo from "@assets/generated_images/cognisolve_ai_logo.png";
+import logo from "@assets/generated_images/manna_solutions_logo.png";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,9 +21,9 @@ export function Navbar() {
       <div className="container mx-auto px-6 h-20 flex items-center justify-between">
         <Link href="/">
           <a className="flex items-center gap-3">
-            <img src={logo} alt="CogniSolve AI" className="h-10 w-10 rounded-lg" />
+            <img src={logo} alt="Manna Solutions LLC" className="h-10 w-10 rounded-lg" />
             <span className="text-xl font-heading font-bold tracking-tight text-white">
-              CogniSolve<span className="text-primary">AI</span>
+              Manna<span className="text-primary">Solutions</span>
             </span>
           </a>
         </Link>
