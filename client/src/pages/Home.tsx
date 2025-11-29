@@ -28,7 +28,7 @@ export default function Home() {
             Next-Gen AI Solutions Available Now
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-heading font-bold leading-tight mb-6 max-w-4xl mx-auto text-white animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
+          <h1 className="text-4xl md:text-7xl font-heading font-bold leading-tight mb-6 max-w-4xl mx-auto text-white animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
             Unlocking the Future with <span className="text-gradient">Intelligent AI/ML</span> Solutions.
           </h1>
           
