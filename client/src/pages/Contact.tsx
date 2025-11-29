@@ -9,11 +9,13 @@ import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useState } from "react";
+import { DemoFunnel } from "@/components/DemoFunnel";
 
 export default function Contact() {
   const { register, handleSubmit, reset } = useForm();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showDemoFunnel, setShowDemoFunnel] = useState(true);
 
   const mutation = useMutation({
     mutationFn: async (data: any) => {
@@ -91,43 +93,66 @@ export default function Contact() {
             </div>
           </div>
 
-          <Card className="border-white/10 bg-secondary/30 backdrop-blur-sm">
-            <CardHeader>
-              <CardTitle>Send us a message</CardTitle>
-              <CardDescription>Fill out the form below and we'll respond within 24 hours.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-white">First Name</label>
-                    <Input {...register("firstName")} placeholder="Jane" className="bg-background/50 border-white/10" />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-white">Last Name</label>
-                    <Input {...register("lastName")} placeholder="Doe" className="bg-background/50 border-white/10" />
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-white">Email</label>
-                  <Input {...register("email")} type="email" placeholder="jane@company.com" className="bg-background/50 border-white/10" />
-                </div>
+          <div className="space-y-6">
+            {showDemoFunnel && (
+              <DemoFunnel onConsultationClick={() => setShowDemoFunnel(false)} />
+            )}
 
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-white">Subject</label>
-                  <Input {...register("subject")} placeholder="Project Inquiry" className="bg-background/50 border-white/10" />
-                </div>
+            {!showDemoFunnel && (
+              <>
+                <Card className="border-white/10 bg-secondary/30 backdrop-blur-sm">
+                  <CardHeader>
+                    <CardTitle>Request a Consultation</CardTitle>
+                    <CardDescription>Fill out the form below and we'll respond within 24 hours.</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <label className="text-sm font-medium text-white">First Name</label>
+                          <Input {...register("firstName")} placeholder="Jane" className="bg-background/50 border-white/10" data-testid="input-consultation-firstname" />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-sm font-medium text-white">Last Name</label>
+                          <Input {...register("lastName")} placeholder="Doe" className="bg-background/50 border-white/10" data-testid="input-consultation-lastname" />
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium text-white">Email</label>
+                        <Input {...register("email")} type="email" placeholder="jane@company.com" className="bg-background/50 border-white/10" data-testid="input-consultation-email" />
+                      </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-white">Message</label>
-                  <Textarea {...register("message")} placeholder="Tell us about your project needs..." className="min-h-[150px] bg-background/50 border-white/10" />
-                </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium text-white">Subject</label>
+                        <Input {...register("subject")} placeholder="Project Inquiry" className="bg-background/50 border-white/10" data-testid="input-consultation-subject" />
+                      </div>
 
-                <Button type="submit" className="w-full" disabled={isSubmitting}>{isSubmitting ? "Sending..." : "Send Message"}</Button>
-              </form>
-            </CardContent>
-          </Card>
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium text-white">Message</label>
+                        <Textarea {...register("message")} placeholder="Tell us about your project needs..." className="min-h-[150px] bg-background/50 border-white/10" data-testid="input-consultation-message" />
+                      </div>
+
+                      <div className="flex gap-3 pt-4">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => setShowDemoFunnel(true)}
+                          className="flex-1 border-white/10"
+                          data-testid="button-back-demo"
+                        >
+                          Back
+                        </Button>
+                        <Button type="submit" className="flex-1" disabled={isSubmitting} data-testid="button-submit-consultation">
+                          {isSubmitting ? "Sending..." : "Send Message"}
+                        </Button>
+                      </div>
+                    </form>
+                  </CardContent>
+                </Card>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </Layout>

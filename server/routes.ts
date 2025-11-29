@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertProjectSchema, insertContactSchema } from "@shared/schema";
+import { insertProjectSchema, insertContactSchema, insertDemoRequestSchema } from "@shared/schema";
 import { z } from "zod";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
 
@@ -143,6 +143,29 @@ export async function registerRoutes(
       res.json({ publishableKey });
     } catch (error) {
       res.status(500).json({ message: "Failed to get Stripe config" });
+    }
+  });
+
+  // Demo Requests endpoints
+  app.post("/api/demo-requests", async (req, res) => {
+    try {
+      const validated = insertDemoRequestSchema.parse(req.body);
+      const demoRequest = await storage.createDemoRequest(validated);
+      res.status(201).json(demoRequest);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid demo request data", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to create demo request" });
+    }
+  });
+
+  app.get("/api/demo-requests", async (req, res) => {
+    try {
+      const demoRequests = await storage.getAllDemoRequests();
+      res.json(demoRequests);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch demo requests" });
     }
   });
 

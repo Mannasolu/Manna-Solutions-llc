@@ -29,6 +29,22 @@ export const contacts = pgTable("contacts", {
   createdAt: date("createdAt").notNull().default(sql`CURRENT_DATE`),
 });
 
+export const demoRequests = pgTable("demo_requests", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  firstName: text("first_name").notNull(),
+  lastName: text("last_name").notNull(),
+  email: text("email").notNull(),
+  company: text("company"),
+  jobTitle: text("job_title"),
+  industry: text("industry"),
+  companySize: text("company_size"),
+  challenges: text("challenges"),
+  timeline: text("timeline"),
+  budget: text("budget"),
+  consultationNotes: text("consultation_notes"),
+  createdAt: date("createdAt").notNull().default(sql`CURRENT_DATE`),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -43,9 +59,16 @@ export const insertContactSchema = createInsertSchema(contacts).omit({
   createdAt: true,
 });
 
+export const insertDemoRequestSchema = createInsertSchema(demoRequests).omit({
+  id: true,
+  createdAt: true,
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type InsertProject = z.infer<typeof insertProjectSchema>;
 export type Project = typeof projects.$inferSelect;
 export type InsertContact = z.infer<typeof insertContactSchema>;
 export type Contact = typeof contacts.$inferSelect;
+export type InsertDemoRequest = z.infer<typeof insertDemoRequestSchema>;
+export type DemoRequest = typeof demoRequests.$inferSelect;

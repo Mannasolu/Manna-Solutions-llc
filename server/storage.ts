@@ -1,4 +1,4 @@
-import { type User, type InsertUser, type Project, type InsertProject, type Contact, type InsertContact } from "@shared/schema";
+import { type User, type InsertUser, type Project, type InsertProject, type Contact, type InsertContact, type DemoRequest, type InsertDemoRequest } from "@shared/schema";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as schema from "@shared/schema";
@@ -24,6 +24,10 @@ export interface IStorage {
   // Contacts
   createContact(contact: InsertContact): Promise<Contact>;
   getAllContacts(): Promise<Contact[]>;
+  
+  // Demo Requests
+  createDemoRequest(demoRequest: InsertDemoRequest): Promise<DemoRequest>;
+  getAllDemoRequests(): Promise<DemoRequest[]>;
 }
 
 export class DbStorage implements IStorage {
@@ -76,6 +80,16 @@ export class DbStorage implements IStorage {
 
   async getAllContacts(): Promise<Contact[]> {
     return db.select().from(schema.contacts);
+  }
+
+  // Demo Requests
+  async createDemoRequest(demoRequest: InsertDemoRequest): Promise<DemoRequest> {
+    const result = await db.insert(schema.demoRequests).values(demoRequest).returning();
+    return result[0];
+  }
+
+  async getAllDemoRequests(): Promise<DemoRequest[]> {
+    return db.select().from(schema.demoRequests);
   }
 }
 
