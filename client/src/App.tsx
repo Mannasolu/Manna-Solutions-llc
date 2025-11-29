@@ -11,6 +11,7 @@ import Contact from "@/pages/Contact";
 import Login from "@/pages/Login";
 import Dashboard from "@/pages/Dashboard";
 import Settings from "@/pages/Settings";
+import Consultations from "@/pages/Consultations";
 import Blog from "@/pages/Blog";
 
 function Router() {
@@ -24,6 +25,7 @@ function Router() {
       <Route path="/login" component={Login} />
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/dashboard/settings" component={Settings} />
+      <Route path="/dashboard/consultations" component={Consultations} />
       <Route path="/dashboard/:any*" component={Dashboard} />
       <Route component={NotFound} />
     </Switch>

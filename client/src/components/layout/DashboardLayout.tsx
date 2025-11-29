@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { ReactNode } from "react";
-import { LayoutDashboard, FolderKanban, FileText, Settings, LogOut, Bell } from "lucide-react";
+import { LayoutDashboard, FolderKanban, FileText, MessageSquare, Settings, LogOut, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import logo from "@assets/logo_1764423796982.jpeg";
@@ -16,6 +16,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const navItems = [
     { icon: LayoutDashboard, label: "Overview", href: "/dashboard" },
     { icon: FolderKanban, label: "Projects", href: "/dashboard/projects" },
+    { icon: MessageSquare, label: "Consultations", href: "/dashboard/consultations" },
     { icon: FileText, label: "Documents", href: "/dashboard/documents" },
     { icon: Settings, label: "Settings", href: "/dashboard/settings" },
   ];
