@@ -61,7 +61,7 @@ export default function About() {
                   <img 
                     src={getImage(member.image)} 
                     alt={member.name} 
-                    className="h-32 w-32 rounded-full object-cover border-2 border-white/10 relative z-10"
+                    className="h-32 w-32 rounded-full object-cover object-center border-2 border-white/10 relative z-10"
                   />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-1">{member.name}</h3>
