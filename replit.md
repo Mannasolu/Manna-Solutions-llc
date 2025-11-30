@@ -102,10 +102,10 @@ Build approach: Minimize credit usage; review as you go. Uses Autonomous mode fo
 
 **Payment Processing**:
 - **Stripe** - Subscription billing and payment processing
-  - Replit Connector integration for automatic credential management
+  - Environment-based credential management via STRIPE_PUBLISHABLE_KEY and STRIPE_SECRET_KEY secrets
   - Managed webhooks via `stripe-replit-sync` package
   - Customer portal for subscription management
-  - Environment-aware (development/production) API keys
+  - Note: Stripe connector was dismissed; using secrets-based authentication instead
 
 **Infrastructure**:
 - **Neon Database** - Serverless PostgreSQL hosting
