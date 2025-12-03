@@ -70,9 +70,11 @@ export default function Solutions() {
                 </p>
                 
                 <div className="flex flex-wrap gap-2 mt-auto">
-                  <span className="px-3 py-1 rounded-full bg-primary/10 text-xs font-medium text-primary border border-primary/20" data-testid={`use-case-${i}`}>
-                    {service.useCase}
-                  </span>
+                  <Link href="/contact">
+                    <span className="px-3 py-1 rounded-full bg-primary/10 text-xs font-medium text-primary border border-primary/20 hover:bg-primary/20 cursor-pointer transition-colors" data-testid={`use-case-${i}`}>
+                      {service.useCase}
+                    </span>
+                  </Link>
                   <Link href="/contact">
                     <span className="px-3 py-1 rounded-full bg-secondary text-xs font-medium text-muted-foreground border border-white/5 hover:border-primary/50 cursor-pointer transition-colors">
                       Learn More
