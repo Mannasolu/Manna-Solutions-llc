@@ -4,24 +4,28 @@ export const services = [
   {
     title: "Predictive Analytics",
     description: "Custom ML models trained for predictive analytics, automation, and pattern recognition to optimize complex decision-making processes.",
+    useCase: "Retail Demand Forecasting",
     icon: BarChart3,
     color: "text-blue-400"
   },
   {
     title: "Natural Language Processing",
     description: "Entity extraction, document classification, and sentiment analysis to unlock insights from unstructured text data.",
+    useCase: "Customer Sentiment Analysis",
     icon: Bot,
     color: "text-cyan-400"
   },
   {
     title: "Computer Vision",
     description: "Advanced object detection, OCR, and image segmentation capabilities for automated visual inspection and analysis.",
+    useCase: "Quality Control Automation",
     icon: Eye,
     color: "text-emerald-400"
   },
   {
     title: "ML Ops & Deployment",
     description: "Model versioning, CI/CD pipelines, drift monitoring, and cloud-based deployment on SageMaker, Vertex AI, and Azure ML.",
+    useCase: "Production ML Infrastructure",
     icon: Cloud,
     color: "text-violet-400"
   }
