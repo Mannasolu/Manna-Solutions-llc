@@ -11,36 +11,69 @@ export default function Blog() {
   const posts = [
     {
       id: 1,
-      title: "The Future of Predictive Analytics in Retail",
-      excerpt: "How AI is transforming inventory management and customer demand forecasting for global brands.",
+      title: "How Small Businesses Can Leverage AI in 2025",
+      excerpt: "Practical strategies for implementing AI solutions that deliver ROI without enterprise-level budgets. Learn how automation and smart analytics can level the playing field.",
+      author: "Amani Latson",
+      role: "CEO",
+      image: ceoImg,
+      date: "Dec 15, 2024",
+      cover: analyticsImg,
+      category: "Strategy"
+    },
+    {
+      id: 2,
+      title: "The Rise of Edge Computing in AI Applications",
+      excerpt: "Why processing data closer to the source is revolutionizing real-time decision making in manufacturing, logistics, and IoT deployments.",
       author: "David Chen",
       role: "Lead Data Scientist",
       image: dsImg,
-      date: "Nov 28, 2024",
+      date: "Dec 8, 2024",
+      cover: analyticsImg,
+      category: "Technology"
+    },
+    {
+      id: 3,
+      title: "Building Trust Through Explainable AI",
+      excerpt: "How transparent machine learning models help businesses comply with regulations while gaining stakeholder confidence in automated decisions.",
+      author: "Amani Latson",
+      role: "CEO",
+      image: ceoImg,
+      date: "Nov 22, 2024",
+      cover: analyticsImg,
+      category: "Ethics"
+    },
+    {
+      id: 4,
+      title: "NLP Breakthroughs: From Chatbots to Document Intelligence",
+      excerpt: "Exploring how natural language processing is evolving beyond simple chatbots to power sophisticated document analysis and knowledge extraction systems.",
+      author: "David Chen",
+      role: "Lead Data Scientist",
+      image: dsImg,
+      date: "Nov 10, 2024",
       cover: analyticsImg,
       category: "Analytics"
     },
     {
-      id: 2,
-      title: "Ethical AI: Navigating the New Frontier",
-      excerpt: "Understanding the importance of explainability and bias reduction in machine learning models.",
-      author: "Amani Latson",
-      role: "CEO",
-      image: ceoImg,
-      date: "Nov 15, 2024",
-      cover: analyticsImg, // Reusing for now
-      category: "Strategy"
-    },
-    {
-      id: 3,
-      title: "Optimizing Supply Chains with Computer Vision",
-      excerpt: "Real-world use cases of automated visual inspection in manufacturing environments.",
+      id: 5,
+      title: "Reducing Costs with Predictive Maintenance",
+      excerpt: "How machine learning models can predict equipment failures before they happen, saving companies millions in downtime and repair costs.",
       author: "David Chen",
       role: "Lead Data Scientist",
       image: dsImg,
-      date: "Oct 30, 2024",
-      cover: analyticsImg, // Reusing for now
-      category: "Technology"
+      date: "Oct 28, 2024",
+      cover: analyticsImg,
+      category: "Case Study"
+    },
+    {
+      id: 6,
+      title: "The Houston Tech Scene: AI Innovation in the Energy Corridor",
+      excerpt: "How Texas-based companies are adopting AI solutions to modernize operations in oil, gas, logistics, and healthcare sectors.",
+      author: "Amani Latson",
+      role: "CEO",
+      image: ceoImg,
+      date: "Oct 15, 2024",
+      cover: analyticsImg,
+      category: "Industry"
     }
   ];
 
