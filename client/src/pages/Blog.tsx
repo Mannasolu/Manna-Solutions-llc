@@ -3,6 +3,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Calendar, User } from "lucide-react";
+import { Link } from "wouter";
 import ceoImg from "@assets/DSC08797-1_1764429137126.JPG";
 import dsImg from "@assets/generated_images/data_scientist_headshot.png";
 import analyticsImg from "@assets/generated_images/predictive_analytics_visualization.png";
@@ -117,9 +118,11 @@ export default function Blog() {
                   </p>
                 </CardContent>
                 <CardFooter className="pt-0">
-                  <Button variant="link" className="px-0 text-primary hover:text-primary/80">
-                    Read Article
-                  </Button>
+                  <Link href="/contact">
+                    <Button variant="link" className="px-0 text-primary hover:text-primary/80" data-testid={`read-article-${post.id}`}>
+                      Read Article
+                    </Button>
+                  </Link>
                 </CardFooter>
               </Card>
             ))}
