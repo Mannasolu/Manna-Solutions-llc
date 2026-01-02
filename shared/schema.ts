@@ -66,6 +66,9 @@ export const truckerClients = pgTable("trucker_clients", {
   email: text("email").notNull(),
   phone: text("phone"),
   address: text("address"),
+  fleetSize: integer("fleet_size").default(1),
+  operationType: text("operation_type"), // "Owner-Operator", "Small Fleet", "Large Fleet"
+  trackingFeatures: text("tracking_features").array(), // selected features to track
   subscriptionTierId: varchar("subscription_tier_id").notNull(),
   subscriptionStartDate: date("subscription_start_date").notNull().default(sql`CURRENT_DATE`),
   isActive: boolean("is_active").notNull().default(true),

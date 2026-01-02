@@ -14,6 +14,7 @@ import Settings from "@/pages/Settings";
 import Consultations from "@/pages/Consultations";
 import Blog from "@/pages/Blog";
 import Capabilities from "@/pages/Capabilities";
+import TruckerOnboarding from "@/pages/TruckerOnboarding";
 import TruckerDashboard from "@/pages/dashboard/TruckerDashboard";
 import MileageTracking from "@/pages/dashboard/MileageTracking";
 import FuelExpenses from "@/pages/dashboard/FuelExpenses";
@@ -30,6 +31,7 @@ function Router() {
       <Route path="/about" component={About} />
       <Route path="/blog" component={Blog} />
       <Route path="/capabilities" component={Capabilities} />
+      <Route path="/trucker-signup" component={TruckerOnboarding} />
       <Route path="/contact" component={Contact} />
       <Route path="/login" component={Login} />
       <Route path="/dashboard" component={TruckerDashboard} />

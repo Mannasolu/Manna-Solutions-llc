@@ -164,7 +164,7 @@ export default function Solutions() {
                     ))}
                   </ul>
 
-                  <Link href="/dashboard">
+                  <Link href="/trucker-signup">
                     <Button
                       size="lg"
                       className="w-full rounded-xl"
@@ -191,7 +191,7 @@ export default function Solutions() {
             <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
               Start your free trial today and see how Manna Solutions' expense tracking can save you time and money.
             </p>
-            <Link href="/login">
+            <Link href="/trucker-signup">
               <Button size="lg" className="rounded-full">
                 Start Your Free Trial <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
