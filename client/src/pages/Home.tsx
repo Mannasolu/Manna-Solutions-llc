@@ -42,9 +42,14 @@ export default function Home() {
                 Explore Our Solutions
               </Button>
             </Link>
+            <Link href="/capabilities">
+              <Button variant="outline" size="lg" className="h-14 px-8 text-base rounded-full border-primary/30 text-white hover:bg-primary/10 backdrop-blur-sm" data-testid="button-capabilities">
+                Capability Statement <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
             <Link href="/contact">
-              <Button variant="outline" size="lg" className="h-14 px-8 text-base rounded-full border-white/10 text-white hover:bg-white/5 backdrop-blur-sm">
-                Request a Demo <ArrowRight className="ml-2 h-4 w-4" />
+              <Button variant="ghost" size="lg" className="h-14 px-8 text-base rounded-full text-muted-foreground hover:text-white hover:bg-white/5">
+                Contact Us
               </Button>
             </Link>
           </div>

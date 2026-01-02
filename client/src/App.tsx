@@ -13,6 +13,7 @@ import Dashboard from "@/pages/Dashboard";
 import Settings from "@/pages/Settings";
 import Consultations from "@/pages/Consultations";
 import Blog from "@/pages/Blog";
+import Capabilities from "@/pages/Capabilities";
 import TruckerDashboard from "@/pages/dashboard/TruckerDashboard";
 import MileageTracking from "@/pages/dashboard/MileageTracking";
 import FuelExpenses from "@/pages/dashboard/FuelExpenses";
@@ -28,6 +29,7 @@ function Router() {
       <Route path="/solutions" component={Solutions} />
       <Route path="/about" component={About} />
       <Route path="/blog" component={Blog} />
+      <Route path="/capabilities" component={Capabilities} />
       <Route path="/contact" component={Contact} />
       <Route path="/login" component={Login} />
       <Route path="/dashboard" component={TruckerDashboard} />
