@@ -9,7 +9,8 @@ import {
   type FuelExpense, type InsertFuelExpense,
   type MaintenanceExpense, type InsertMaintenanceExpense,
   type FoodExpense, type InsertFoodExpense,
-  type PaperworkDocument, type InsertPaperworkDocument
+  type PaperworkDocument, type InsertPaperworkDocument,
+  type ReceiptImage, type InsertReceiptImage
 } from "@shared/schema";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
@@ -87,6 +88,11 @@ export interface IStorage {
   getPaperworkDocumentsByClient(truckerClientId: string): Promise<PaperworkDocument[]>;
   updatePaperworkDocument(id: string, doc: Partial<InsertPaperworkDocument>): Promise<PaperworkDocument | undefined>;
   deletePaperworkDocument(id: string): Promise<boolean>;
+
+  // Receipt Images
+  createReceiptImage(image: InsertReceiptImage): Promise<ReceiptImage>;
+  getReceiptImagesByClient(truckerClientId: string): Promise<ReceiptImage[]>;
+  getStorageUsage(truckerClientId: string): Promise<{ totalImages: number; totalStorageMb: number; monthlyCost: number }>;
 }
 
 export class DbStorage implements IStorage {
@@ -314,6 +320,29 @@ export class DbStorage implements IStorage {
   async deletePaperworkDocument(id: string): Promise<boolean> {
     const result = await db.delete(schema.paperworkDocuments).where(eq(schema.paperworkDocuments.id, id)).returning();
     return result.length > 0;
+  }
+
+  // Receipt Images
+  async createReceiptImage(image: InsertReceiptImage): Promise<ReceiptImage> {
+    const result = await db.insert(schema.receiptImages).values(image).returning();
+    return result[0];
+  }
+
+  async getReceiptImagesByClient(truckerClientId: string): Promise<ReceiptImage[]> {
+    return db.select().from(schema.receiptImages).where(eq(schema.receiptImages.truckerClientId, truckerClientId));
+  }
+
+  async getStorageUsage(truckerClientId: string): Promise<{ totalImages: number; totalStorageMb: number; monthlyCost: number }> {
+    const images = await this.getReceiptImagesByClient(truckerClientId);
+    const activeImages = images.filter(img => img.isActive);
+    const totalBytes = activeImages.reduce((sum, img) => sum + (img.fileSizeBytes || 0), 0);
+    const totalStorageMb = totalBytes / (1024 * 1024);
+    const monthlyCost = activeImages.length * 0.05; // $0.05 per image per month
+    return {
+      totalImages: activeImages.length,
+      totalStorageMb: Math.round(totalStorageMb * 100) / 100,
+      monthlyCost: Math.round(monthlyCost * 100) / 100
+    };
   }
 }
 

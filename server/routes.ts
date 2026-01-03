@@ -6,11 +6,12 @@ import {
   insertSubscriptionTierSchema, insertTruckerClientSchema,
   insertMileageLogSchema, insertFuelExpenseSchema,
   insertMaintenanceExpenseSchema, insertFoodExpenseSchema,
-  insertPaperworkDocumentSchema
+  insertPaperworkDocumentSchema, insertReceiptImageSchema
 } from "@shared/schema";
 import { z } from "zod";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
 import { registerExtractionRoutes } from "./replit_integrations/extraction";
+import { registerObjectStorageRoutes } from "./replit_integrations/object_storage";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -582,6 +583,62 @@ export async function registerRoutes(
 
   // Register AI extraction routes
   registerExtractionRoutes(app);
+
+  // Register object storage routes for file uploads
+  registerObjectStorageRoutes(app);
+
+  // Receipt image storage endpoints
+  app.post("/api/receipt-images", async (req, res) => {
+    try {
+      const validated = insertReceiptImageSchema.parse(req.body);
+      const image = await storage.createReceiptImage(validated);
+      res.status(201).json(image);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid receipt image data", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to save receipt image" });
+    }
+  });
+
+  app.get("/api/receipt-images", async (req, res) => {
+    try {
+      const truckerClientId = req.query.truckerClientId as string;
+      if (!truckerClientId) {
+        return res.status(400).json({ message: "truckerClientId is required" });
+      }
+      const images = await storage.getReceiptImagesByClient(truckerClientId);
+      res.json(images);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch receipt images" });
+    }
+  });
+
+  app.get("/api/storage-pricing", async (req, res) => {
+    res.json({
+      pricePerImagePerMonth: 0.05,
+      description: "Receipt image storage - $0.05 per image per month",
+      features: [
+        "Secure cloud storage for your receipt images",
+        "Access anytime from any device",
+        "Automatic backup and recovery",
+        "Links receipts to your expense records"
+      ]
+    });
+  });
+
+  app.get("/api/storage-usage", async (req, res) => {
+    try {
+      const truckerClientId = req.query.truckerClientId as string;
+      if (!truckerClientId) {
+        return res.status(400).json({ message: "truckerClientId is required" });
+      }
+      const usage = await storage.getStorageUsage(truckerClientId);
+      res.json(usage);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch storage usage" });
+    }
+  });
 
   return httpServer;
 }

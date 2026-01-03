@@ -125,6 +125,33 @@ export const paperworkDocuments = pgTable("paperwork_documents", {
   createdAt: timestamp("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
 });
 
+// Receipt Image Storage - billable feature
+export const receiptImages = pgTable("receipt_images", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  truckerClientId: varchar("trucker_client_id").notNull(),
+  expenseType: text("expense_type").notNull(), // "fuel", "maintenance", "food", "mileage"
+  expenseId: varchar("expense_id"), // links to the specific expense record
+  objectPath: text("object_path").notNull(), // storage path
+  originalFileName: text("original_file_name"),
+  fileSizeBytes: integer("file_size_bytes"),
+  mimeType: text("mime_type"),
+  monthlyStorageCost: decimal("monthly_storage_cost", { precision: 10, scale: 4 }).notNull().default("0.05"), // $0.05/image/month
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+});
+
+// Storage billing summary per trucker client
+export const storageBilling = pgTable("storage_billing", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  truckerClientId: varchar("trucker_client_id").notNull(),
+  billingMonth: date("billing_month").notNull(), // first day of the billing month
+  totalImages: integer("total_images").notNull().default(0),
+  totalStorageMb: decimal("total_storage_mb", { precision: 10, scale: 2 }).notNull().default("0"),
+  totalCost: decimal("total_cost", { precision: 10, scale: 2 }).notNull().default("0"),
+  isPaid: boolean("is_paid").notNull().default(false),
+  createdAt: timestamp("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -179,6 +206,16 @@ export const insertPaperworkDocumentSchema = createInsertSchema(paperworkDocumen
   createdAt: true,
 });
 
+export const insertReceiptImageSchema = createInsertSchema(receiptImages).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertStorageBillingSchema = createInsertSchema(storageBilling).omit({
+  id: true,
+  createdAt: true,
+});
+
 // Types
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -203,6 +240,10 @@ export type InsertFoodExpense = z.infer<typeof insertFoodExpenseSchema>;
 export type FoodExpense = typeof foodExpenses.$inferSelect;
 export type InsertPaperworkDocument = z.infer<typeof insertPaperworkDocumentSchema>;
 export type PaperworkDocument = typeof paperworkDocuments.$inferSelect;
+export type InsertReceiptImage = z.infer<typeof insertReceiptImageSchema>;
+export type ReceiptImage = typeof receiptImages.$inferSelect;
+export type InsertStorageBilling = z.infer<typeof insertStorageBillingSchema>;
+export type StorageBilling = typeof storageBilling.$inferSelect;
 
 // Re-export chat schema for AI integrations
 export * from "./models/chat";
