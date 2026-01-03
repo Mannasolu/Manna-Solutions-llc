@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import {
   Upload,
@@ -21,6 +22,8 @@ import {
   ArrowLeft,
   Sparkles,
   Loader2,
+  Cloud,
+  DollarSign,
 } from "lucide-react";
 import { Link } from "wouter";
 
@@ -52,8 +55,12 @@ export default function DocumentExtractor() {
   const [isSaving, setIsSaving] = useState(false);
   const [isExtracting, setIsExtracting] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [saveReceiptImage, setSaveReceiptImage] = useState(false);
+  const [isUploadingReceipt, setIsUploadingReceipt] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+
+  const STORAGE_PRICE_PER_IMAGE = 0.05; // $0.05 per image per month
 
   const extractFromDocument = async () => {
     if (!selectedFile || !selectedFile.type.startsWith("image/")) {
@@ -210,6 +217,53 @@ export default function DocumentExtractor() {
     setIsSaving(true);
 
     try {
+      let objectPath: string | null = null;
+
+      // If user opted to save receipt image, upload it first
+      if (saveReceiptImage && selectedFile && selectedFile.type.startsWith("image/")) {
+        setIsUploadingReceipt(true);
+        try {
+          // Get presigned upload URL
+          const urlResponse = await fetch("/api/uploads/request-url", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name: selectedFile.name,
+              size: selectedFile.size,
+              contentType: selectedFile.type,
+            }),
+          });
+
+          if (!urlResponse.ok) {
+            throw new Error("Failed to get upload URL");
+          }
+
+          const { uploadURL, objectPath: path } = await urlResponse.json();
+          objectPath = path;
+
+          // Upload file directly to storage
+          const uploadResponse = await fetch(uploadURL, {
+            method: "PUT",
+            body: selectedFile,
+            headers: { "Content-Type": selectedFile.type },
+          });
+
+          if (!uploadResponse.ok) {
+            throw new Error("Failed to upload receipt image");
+          }
+        } catch (uploadError) {
+          console.error("Receipt upload error:", uploadError);
+          toast({
+            title: "Receipt upload failed",
+            description: "Expense will be saved without the receipt image",
+            variant: "destructive",
+          });
+          objectPath = null;
+        } finally {
+          setIsUploadingReceipt(false);
+        }
+      }
+
       let endpoint = "";
       let payload: Record<string, unknown> = {};
 
@@ -269,10 +323,36 @@ export default function DocumentExtractor() {
         throw new Error("Failed to save expense");
       }
 
+      const savedExpense = await response.json();
+
+      // Save receipt image record if uploaded
+      if (objectPath && selectedFile) {
+        try {
+          await fetch("/api/receipt-images", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              truckerClientId: "demo-client",
+              expenseType,
+              expenseId: savedExpense.id,
+              objectPath,
+              originalFileName: selectedFile.name,
+              fileSizeBytes: selectedFile.size,
+              mimeType: selectedFile.type,
+              monthlyStorageCost: STORAGE_PRICE_PER_IMAGE.toString(),
+            }),
+          });
+        } catch (receiptError) {
+          console.error("Failed to save receipt record:", receiptError);
+        }
+      }
+
       setSaved(true);
       toast({
         title: "Expense saved!",
-        description: `Your ${expenseType} expense has been recorded`,
+        description: objectPath 
+          ? `Your ${expenseType} expense has been recorded with receipt image stored` 
+          : `Your ${expenseType} expense has been recorded`,
       });
     } catch (error) {
       console.error("Save error:", error);
@@ -514,6 +594,40 @@ export default function DocumentExtractor() {
                 />
               </div>
 
+              {selectedFile && selectedFile.type.startsWith("image/") && (
+                <div className="p-4 rounded-lg border border-border bg-secondary/30 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-lg bg-primary/10">
+                        <Cloud className="h-5 w-5 text-primary" />
+                      </div>
+                      <div>
+                        <Label htmlFor="save-receipt" className="text-sm font-medium cursor-pointer">
+                          Save Receipt Image
+                        </Label>
+                        <p className="text-xs text-muted-foreground">
+                          Store a copy for your records
+                        </p>
+                      </div>
+                    </div>
+                    <Switch
+                      id="save-receipt"
+                      checked={saveReceiptImage}
+                      onCheckedChange={setSaveReceiptImage}
+                      data-testid="switch-save-receipt"
+                    />
+                  </div>
+                  {saveReceiptImage && (
+                    <div className="flex items-center gap-2 text-sm bg-primary/5 p-2 rounded-md">
+                      <DollarSign className="h-4 w-4 text-green-400" />
+                      <span className="text-muted-foreground">
+                        Storage cost: <span className="text-white font-medium">${STORAGE_PRICE_PER_IMAGE.toFixed(2)}/month</span> per image
+                      </span>
+                    </div>
+                  )}
+                </div>
+              )}
+
               <Button
                 className="w-full"
                 size="lg"
@@ -526,12 +640,20 @@ export default function DocumentExtractor() {
                     <CheckCircle className="h-5 w-5 mr-2" />
                     Saved Successfully
                   </>
+                ) : isUploadingReceipt ? (
+                  <>
+                    <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                    Uploading Receipt...
+                  </>
                 ) : isSaving ? (
-                  "Saving..."
+                  <>
+                    <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                    Saving...
+                  </>
                 ) : (
                   <>
                     <Save className="h-5 w-5 mr-2" />
-                    Save Expense
+                    {saveReceiptImage ? "Save Expense & Receipt" : "Save Expense"}
                   </>
                 )}
               </Button>
