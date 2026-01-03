@@ -13,6 +13,7 @@ import {
   ArrowRight,
   TrendingUp,
   DollarSign,
+  Upload,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 
@@ -91,6 +92,13 @@ export default function TruckerDashboard() {
       description: "Manage documents and receipts",
       href: "/dashboard/paperwork",
       color: "text-purple-400",
+    },
+    {
+      icon: Upload,
+      label: "Document Extractor",
+      description: "Upload receipts to log expenses",
+      href: "/dashboard/extract",
+      color: "text-cyan-400",
     },
     {
       icon: CreditCard,
