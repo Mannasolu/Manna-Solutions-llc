@@ -203,3 +203,6 @@ export type InsertFoodExpense = z.infer<typeof insertFoodExpenseSchema>;
 export type FoodExpense = typeof foodExpenses.$inferSelect;
 export type InsertPaperworkDocument = z.infer<typeof insertPaperworkDocumentSchema>;
 export type PaperworkDocument = typeof paperworkDocuments.$inferSelect;
+
+// Re-export chat schema for AI integrations
+export * from "./models/chat";

@@ -19,6 +19,8 @@ import {
   X,
   CheckCircle,
   ArrowLeft,
+  Sparkles,
+  Loader2,
 } from "lucide-react";
 import { Link } from "wouter";
 
@@ -48,9 +50,80 @@ export default function DocumentExtractor() {
     miles: "",
   });
   const [isSaving, setIsSaving] = useState(false);
+  const [isExtracting, setIsExtracting] = useState(false);
   const [saved, setSaved] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+
+  const extractFromDocument = async () => {
+    if (!selectedFile || !selectedFile.type.startsWith("image/")) {
+      toast({
+        title: "Image required",
+        description: "Please upload an image file to extract data",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsExtracting(true);
+
+    try {
+      const base64 = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const result = reader.result as string;
+          resolve(result.split(",")[1]);
+        };
+        reader.onerror = () => reject(new Error("Failed to read file"));
+        reader.readAsDataURL(selectedFile);
+      });
+
+      const response = await fetch("/api/extract-document", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          imageBase64: base64,
+          mimeType: selectedFile.type,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || "Extraction failed");
+      }
+
+      const data = await response.json();
+      const extracted = data.extracted;
+
+      setExtractedData({
+        date: extracted.date || "",
+        amount: extracted.amount || "",
+        description: extracted.description || "",
+        vendor: extracted.vendor || "",
+        gallons: extracted.gallons || "",
+        pricePerGallon: extracted.pricePerGallon || "",
+        miles: extracted.miles || "",
+      });
+
+      if (extracted.expenseType) {
+        setExpenseType(extracted.expenseType);
+      }
+
+      toast({
+        title: "Data extracted!",
+        description: "Review the extracted information and make any corrections",
+      });
+    } catch (error) {
+      console.error("Extraction error:", error);
+      toast({
+        title: "Extraction failed",
+        description: error instanceof Error ? error.message : "Could not extract data from the image. Please enter manually.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsExtracting(false);
+    }
+  };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -304,6 +377,26 @@ export default function DocumentExtractor() {
                   <p className="text-sm text-muted-foreground text-center">
                     {selectedFile.name}
                   </p>
+                  {previewUrl && (
+                    <Button
+                      className="w-full"
+                      onClick={extractFromDocument}
+                      disabled={isExtracting}
+                      data-testid="button-extract"
+                    >
+                      {isExtracting ? (
+                        <>
+                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                          Extracting...
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="h-4 w-4 mr-2" />
+                          Extract with AI
+                        </>
+                      )}
+                    </Button>
+                  )}
                 </div>
               )}
             </CardContent>
@@ -316,7 +409,7 @@ export default function DocumentExtractor() {
                 Expense Details
               </CardTitle>
               <CardDescription>
-                Enter the information from your document
+                {isExtracting ? "AI is reading your document..." : "Enter the information from your document or use AI extraction"}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">

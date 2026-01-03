@@ -10,6 +10,7 @@ import {
 } from "@shared/schema";
 import { z } from "zod";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
+import { registerExtractionRoutes } from "./replit_integrations/extraction";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -578,6 +579,9 @@ export async function registerRoutes(
       res.status(500).json({ message: "Failed to delete paperwork document" });
     }
   });
+
+  // Register AI extraction routes
+  registerExtractionRoutes(app);
 
   return httpServer;
 }
