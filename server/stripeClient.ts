@@ -2,11 +2,11 @@ import Stripe from 'stripe';
 
 async function getCredentials() {
   const publishableKey = process.env.STRIPE_PUBLISHABLE_KEY;
-  const secretKey = process.env.STRIPE_SECRET_KEY;
+  const secretKey = process.env.STRIPE_API_SECRET_KEY;
 
   if (!publishableKey || !secretKey) {
     throw new Error(
-      'Stripe API keys not configured. Please set STRIPE_PUBLISHABLE_KEY and STRIPE_SECRET_KEY environment variables.'
+      'Stripe API keys not configured. Please set STRIPE_PUBLISHABLE_KEY and STRIPE_API_SECRET_KEY environment variables.'
     );
   }
 
