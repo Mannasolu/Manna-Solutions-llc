@@ -49,6 +49,11 @@ export default function TruckerDashboard() {
         totalMaintenanceCost: 450,
         totalFoodCost: 320,
         monthlyExpenses: 3610.50,
+
+
+
+
+
       });
     } catch (error) {
       console.error("Failed to load dashboard data:", error);
