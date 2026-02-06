@@ -1,81 +1,114 @@
-# Running This Application Locally
-
-This guide explains how to run the Manna Solutions LLC application on your local computer.
+# Running Manna Solutions Locally
 
 ## Prerequisites
 
+Install the following software before getting started:
+
 | Requirement | Version | Notes |
 |-------------|---------|-------|
-| Node.js | v20.x (v20.20.0 recommended) | Download from nodejs.org |
-| npm | v10.x (v10.8.2 recommended) | Comes with Node.js |
-| PostgreSQL | 16.x | Local database or cloud service like Neon |
+| Node.js | v20.x (v20.20.0 recommended) | Download from [nodejs.org](https://nodejs.org) |
+| npm | v10.x (comes with Node.js) | Included with Node.js installation |
+| PostgreSQL | 14+ | Local installation or a cloud service like [Neon](https://neon.tech) |
 
 ## Environment Variables
 
-Create a `.env` file in the project root with these variables:
+Create a `.env` file in the project root with the following variables:
 
-```env
-# Required
-DATABASE_URL=postgresql://user:password@host:5432/database
+### Required
 
-# For Stripe payments (optional - app runs without these)
-STRIPE_PUBLISHABLE_KEY=pk_live_xxx or pk_test_xxx
-STRIPE_API_SECRET_KEY=sk_live_xxx or sk_test_xxx
-STRIPE_WEBHOOK_SECRET=whsec_xxx
+| Variable       | Description                                                                 |
+|----------------|-----------------------------------------------------------------------------|
+| `DATABASE_URL` | Full PostgreSQL connection string (e.g., `postgresql://user:password@localhost:5432/manna`) |
+| `PGHOST`       | Database host (e.g., `localhost`)                                           |
+| `PGPORT`       | Database port (e.g., `5432`)                                                |
+| `PGUSER`       | Database username                                                           |
+| `PGPASSWORD`   | Database password                                                           |
+| `PGDATABASE`   | Database name                                                               |
 
-# For Object Storage - receipt images (Replit-specific, needs alternative locally)
-DEFAULT_OBJECT_STORAGE_BUCKET_ID=your-bucket
-PRIVATE_OBJECT_DIR=.private
-PUBLIC_OBJECT_SEARCH_PATHS=public
+### Recommended
 
-# For AI document extraction (needs Gemini API key from Google AI Studio)
-GEMINI_API_KEY=your-gemini-api-key
+| Variable         | Description                                      |
+|------------------|--------------------------------------------------|
+| `SESSION_SECRET` | Any random string used for session security      |
+
+### Optional (for payment features)
+
+| Variable                 | Description                                              |
+|--------------------------|----------------------------------------------------------|
+| `STRIPE_PUBLISHABLE_KEY` | Your Stripe publishable key (from [Stripe Dashboard](https://dashboard.stripe.com/apikeys)) |
+| `STRIPE_API_SECRET_KEY`  | Your Stripe secret key                                   |
+| `STRIPE_WEBHOOK_SECRET`  | For processing Stripe webhook events                     |
+
+Payment-related features will not function without the Stripe keys configured. The app will still start and run without them.
+
+### Not Needed Locally
+
+The following environment variables are Replit-specific integrations and are **not required** for local development:
+
+- `AI_INTEGRATIONS_GEMINI_*` - Replit's managed Gemini AI integration
+- `DEFAULT_OBJECT_STORAGE_BUCKET_ID` - Replit object storage
+- `PUBLIC_OBJECT_SEARCH_PATHS` - Replit object storage
+- `PRIVATE_OBJECT_DIR` - Replit object storage
+- `REPL_ID`, `REPLIT_DOMAINS`, `REPLIT_DEV_DOMAIN` - Replit platform variables
+
+## Setup Steps
+
+### 1. Install dependencies
+
+```bash
+npm install
 ```
 
-## NPM Scripts
+### 2. Set up your PostgreSQL database
 
-| Command | Purpose |
-|---------|---------|
-| `npm install` | Install all dependencies |
-| `npm run dev` | Start development server (backend + frontend via Vite) |
-| `npm run build` | Build for production |
-| `npm run start` | Run production build |
-| `npm run db:push` | Push database schema to PostgreSQL |
-| `npm run check` | TypeScript type checking |
+Create a database (e.g., named `manna`) in your local PostgreSQL, or use a cloud-hosted database.
 
-## Dependencies Overview
+### 3. Create your `.env` file
 
-### Frontend (React)
-- React 19.2.0, React DOM
-- Vite 7.1.9 (build tool)
-- Tailwind CSS 4.1.14
-- Shadcn/UI components (Radix UI primitives)
-- TanStack React Query (server state)
-- Wouter (routing)
-- React Hook Form + Zod (forms/validation)
-- Lucide React (icons)
-- Framer Motion (animations)
-- Recharts (charts)
+At minimum, set `DATABASE_URL` and the individual `PG*` variables.
 
-### Backend (Express)
-- Express 4.21.2
-- Drizzle ORM 0.39.3 + drizzle-kit
-- @neondatabase/serverless (PostgreSQL driver)
-- Passport.js (authentication - partially implemented)
-- Stripe 18.5.0
+### 4. Push the database schema
 
-### Replit-Specific (need alternatives locally)
-- `@replit/vite-plugin-*` - Can be removed for local dev
-- `stripe-replit-sync` - Uses Replit's managed Stripe integration
-- `@google-cloud/storage` - For object storage (use local file system or S3)
-- `@google/genai` - For Gemini AI (need your own API key)
+This creates all the necessary tables in your PostgreSQL database:
+
+```bash
+npm run db:push
+```
+
+### 5. Start in development mode
+
+```bash
+npm run dev
+```
+
+The app will be available at **http://localhost:5000** with hot reload enabled.
+
+## Production Build
+
+To build and run for production:
+
+```bash
+npm run build
+npm start
+```
+
+## Available Commands
+
+| Command          | Description                                              |
+|------------------|----------------------------------------------------------|
+| `npm install`    | Install all dependencies                                 |
+| `npm run dev`    | Start development server with hot reload (port 5000)     |
+| `npm run build`  | Build both client and server for production              |
+| `npm start`      | Run the production build                                 |
+| `npm run check`  | Run TypeScript type checking                             |
+| `npm run db:push`| Sync the database schema to your PostgreSQL instance     |
 
 ## Project Structure
 
 ```
 ├── client/                 # Frontend React app
 │   ├── src/
-│   │   ├── components/     # UI components
+│   │   ├── components/     # UI components (Shadcn/Radix)
 │   │   ├── pages/          # Page components
 │   │   ├── hooks/          # Custom React hooks
 │   │   └── lib/            # Utilities
@@ -83,75 +116,61 @@ GEMINI_API_KEY=your-gemini-api-key
 ├── server/                 # Backend Express server
 │   ├── index.ts            # Server entry point
 │   ├── routes.ts           # API routes
-│   ├── storage.ts          # Database operations
-│   └── replit_integrations/# AI & storage integrations
-├── shared/                 # Shared code
+│   ├── storage.ts          # Database operations (Drizzle ORM)
+│   ├── stripeClient.ts     # Stripe SDK configuration
+│   └── webhookHandlers.ts  # Stripe webhook processing
+├── shared/                 # Shared between client and server
 │   └── schema.ts           # Database schema (Drizzle)
-├── package.json            # Dependencies & scripts
-├── tsconfig.json           # TypeScript config
-├── vite.config.ts          # Vite bundler config
-├── drizzle.config.ts       # Database config
-└── postcss.config.js       # PostCSS config
+├── script/
+│   └── build.ts            # Production build script
+├── package.json            # Dependencies and scripts
+├── tsconfig.json           # TypeScript configuration
+├── vite.config.ts          # Vite bundler configuration
+├── drizzle.config.ts       # Drizzle Kit database configuration
+└── postcss.config.js       # PostCSS configuration
 ```
 
-## Steps to Run Locally
+## Key Dependencies
 
-1. **Clone/copy the project**
+### Frontend
+- React 19, React DOM
+- Vite 7 (build tool and dev server)
+- Tailwind CSS 4
+- Shadcn/UI components (built on Radix UI)
+- TanStack React Query (server state management)
+- Wouter (client-side routing)
+- React Hook Form + Zod (forms and validation)
+- Lucide React (icons)
+- Framer Motion (animations)
+- Recharts (charts)
 
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-
-3. **Set up PostgreSQL database** (local installation or Neon cloud service)
-
-4. **Create `.env` file** with DATABASE_URL at minimum
-
-5. **Push database schema:**
-   ```bash
-   npm run db:push
-   ```
-
-6. **Start development server:**
-   ```bash
-   npm run dev
-   ```
-
-7. **Open browser:** http://localhost:5000
+### Backend
+- Express 4
+- Drizzle ORM + Drizzle Kit (database ORM and migrations)
+- @neondatabase/serverless (PostgreSQL driver)
+- Stripe SDK (payment processing)
+- Passport.js (authentication - partially implemented)
+- express-session (session management)
 
 ## Notes for Local Development
 
-### Remove Replit Plugins
-Edit `vite.config.ts` to remove or comment out the Replit-specific imports:
-- `@replit/vite-plugin-runtime-error-modal`
-- `@replit/vite-plugin-cartographer`
-- `@replit/vite-plugin-dev-banner`
+### Replit-Specific Vite Plugins
 
-### Object Storage
-The application uses Google Cloud Storage via Replit's integration. For local development:
-- Replace with local file system storage
-- Or configure AWS S3 / Google Cloud Storage with your own credentials
+The Vite config includes a few Replit-specific plugins (`cartographer`, `dev-banner`, `runtime-error-modal`). The cartographer and dev-banner plugins only activate when running on Replit (they check for a `REPL_ID` environment variable) and will be harmlessly skipped on your local machine. The runtime-error-modal plugin works fine locally.
 
-### AI Document Extraction
-The receipt extraction feature uses Google's Gemini AI:
-1. Get an API key from Google AI Studio (https://aistudio.google.com/)
-2. Set `GEMINI_API_KEY` in your `.env` file
+### Port Configuration
 
-### Stripe Payments
-Works as-is with your own Stripe API keys:
-1. Get keys from Stripe Dashboard (https://dashboard.stripe.com/apikeys)
-2. Set `STRIPE_PUBLISHABLE_KEY` and `STRIPE_API_SECRET_KEY` in `.env`
+The app runs on port 5000 by default. You can change this by setting the `PORT` environment variable.
 
 ## Troubleshooting
 
 ### Database Connection Issues
 - Ensure PostgreSQL is running
-- Verify DATABASE_URL format: `postgresql://user:password@localhost:5432/dbname`
-- Check firewall/network settings if using remote database
+- Verify `DATABASE_URL` format: `postgresql://user:password@localhost:5432/dbname`
+- Check firewall/network settings if using a remote database
 
 ### Port Already in Use
-- The app runs on port 5000 by default
-- Kill existing processes or change the PORT environment variable
+- Kill existing processes on port 5000, or set `PORT=3000` (or another available port) in your `.env`
 
 ### TypeScript Errors
 - Run `npm run check` to see all type errors
