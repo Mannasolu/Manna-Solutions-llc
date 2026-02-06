@@ -4,7 +4,7 @@
 
 Manna Solutions LLC is a full-stack web application combining a public-facing marketing website with a client portal for an AI/ML solutions company. The platform showcases the company's AI/ML services (Predictive Analytics, NLP, Computer Vision, ML Ops) while providing authenticated clients with project management, document sharing, and billing capabilities.
 
-The application uses a modern monorepo structure with React/Vite for the frontend, Express for the backend, and PostgreSQL (via Neon) for data persistence.
+The application uses a modern monorepo structure with React/Vite for the frontend, Express for the backend, and PostgreSQL for data persistence. Fully portable -- no platform-specific dependencies.
 
 ## User Preferences
 
@@ -48,7 +48,7 @@ Build approach: Minimize credit usage; review as you go. Uses Autonomous mode fo
 
 ### Data Storage
 
-**Database**: PostgreSQL (Neon serverless)
+**Database**: PostgreSQL (any provider -- Neon, Supabase, local, etc.)
 - **Schema Management**: Drizzle Kit for migrations
 - **Core Tables**:
   - `users` - Authentication (username/password)
@@ -58,7 +58,7 @@ Build approach: Minimize credit usage; review as you go. Uses Autonomous mode fo
 
 **Design Decisions**:
 - UUID primary keys using `gen_random_uuid()`
-- Connection pooling via `@neondatabase/serverless` for serverless compatibility
+- Standard `postgres` driver via `drizzle-orm/postgres-js`
 - Schema defined in shared directory (`shared/schema.ts`) for type sharing between client/server
 - Seed script provides sample project data
 
@@ -74,12 +74,6 @@ Build approach: Minimize credit usage; review as you go. Uses Autonomous mode fo
 **Design Rationale**: Authentication system is stubbed to allow client portal UI development while deferring complex security implementation.
 
 ### External Dependencies
-
-**Infrastructure**:
-- **Neon Database** - Serverless PostgreSQL hosting
-- **Replit Deployment** - Platform hosting with environment variable management
-  - Custom meta image plugin for OpenGraph tags
-  - Development banner and cartographer plugins in dev mode
 
 **Third-Party Libraries**:
 - **UI Components**: Extensive Radix UI component library (@radix-ui/*)
@@ -120,6 +114,13 @@ Build approach: Minimize credit usage; review as you go. Uses Autonomous mode fo
 
 ## Recent Changes
 
+- **2026-02-06**: Complete migration to portable standalone app
+  - Removed all Replit Vite plugins and dependencies
+  - Removed @neondatabase/serverless (uses standard postgres driver)
+  - Removed Replit domain references from meta images plugin (uses BASE_URL env var)
+  - Created .env.example, README.md for GitHub
+  - Updated .gitignore to exclude platform-specific files
+  - Removed RUN_LOCALLY.md (replaced by README.md)
 - **2026-02-06**: Removed Stripe payment integration
   - Removed stripe package, stripeClient.ts, webhookHandlers.ts
   - Removed Stripe API routes (billing portal, config, webhooks)
