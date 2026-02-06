@@ -128,8 +128,10 @@ Build approach: Minimize credit usage; review as you go. Uses Autonomous mode fo
 
 ## Recent Changes
 
-- **2026-02-06**: Removed Trucker Expense Tracking System from this project
+- **2026-02-06**: Removed Trucker Expense Tracking System and cleaned up unused dependencies
   - Removed all trucker dashboard pages, API routes, database schema tables, storage methods, seed data, and export guide
   - Removed AI extraction and object storage integrations
+  - Removed unused packages: @google-cloud/storage, @google/genai, google-auth-library, stripe-replit-sync, @uppy/*, p-limit, p-retry
+  - Removed orphaned ObjectUploader component and use-upload hook
 - **2026-01-04**: Switched from `stripe-replit-sync` to direct Stripe SDK usage
   - Uses `STRIPE_API_SECRET_KEY` instead of `STRIPE_SECRET_KEY` (Replit integration was overwriting the key)
