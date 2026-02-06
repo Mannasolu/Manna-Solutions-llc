@@ -14,15 +14,6 @@ import Settings from "@/pages/Settings";
 import Consultations from "@/pages/Consultations";
 import Blog from "@/pages/Blog";
 import Capabilities from "@/pages/Capabilities";
-import TruckerOnboarding from "@/pages/TruckerOnboarding";
-import TruckerDashboard from "@/pages/dashboard/TruckerDashboard";
-import MileageTracking from "@/pages/dashboard/MileageTracking";
-import FuelExpenses from "@/pages/dashboard/FuelExpenses";
-import MaintenanceTracking from "@/pages/dashboard/MaintenanceTracking";
-import FoodExpenses from "@/pages/dashboard/FoodExpenses";
-import PaperworkManagement from "@/pages/dashboard/PaperworkManagement";
-import SubscriptionManagement from "@/pages/dashboard/SubscriptionManagement";
-import DocumentExtractor from "@/pages/dashboard/DocumentExtractor";
 
 function Router() {
   return (
@@ -32,17 +23,9 @@ function Router() {
       <Route path="/about" component={About} />
       <Route path="/blog" component={Blog} />
       <Route path="/capabilities" component={Capabilities} />
-      <Route path="/trucker-signup" component={TruckerOnboarding} />
       <Route path="/contact" component={Contact} />
       <Route path="/login" component={Login} />
-      <Route path="/dashboard" component={TruckerDashboard} />
-      <Route path="/dashboard/mileage" component={MileageTracking} />
-      <Route path="/dashboard/fuel" component={FuelExpenses} />
-      <Route path="/dashboard/maintenance" component={MaintenanceTracking} />
-      <Route path="/dashboard/food" component={FoodExpenses} />
-      <Route path="/dashboard/paperwork" component={PaperworkManagement} />
-      <Route path="/dashboard/subscription" component={SubscriptionManagement} />
-      <Route path="/dashboard/extract" component={DocumentExtractor} />
+      <Route path="/dashboard" component={Dashboard} />
       <Route path="/dashboard/settings" component={Settings} />
       <Route path="/dashboard/consultations" component={Consultations} />
       <Route component={NotFound} />

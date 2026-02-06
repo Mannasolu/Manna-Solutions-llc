@@ -6,8 +6,6 @@ Manna Solutions LLC is a full-stack web application combining a public-facing ma
 
 The application uses a modern monorepo structure with React/Vite for the frontend, Express for the backend, and PostgreSQL (via Neon) for data persistence. It integrates Stripe for payment processing and subscription management.
 
-Additionally, the platform includes a dedicated **Trucker Expense Tracking System** for managing comprehensive expense tracking for trucking professionals.
-
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
@@ -29,7 +27,6 @@ Build approach: Minimize credit usage; review as you go. Uses Autonomous mode fo
 - Layout components separate public marketing pages from authenticated dashboard
 - Custom fonts (DM Sans for body, Space Grotesk for headings) loaded from Google Fonts
 - Responsive-first design with mobile breakpoint at 768px
-- Dashboard subsystem for trucker expense tracking with 7 dedicated pages
 
 ### Backend Architecture
 
@@ -42,14 +39,7 @@ Build approach: Minimize credit usage; review as you go. Uses Autonomous mode fo
 - `/api/projects` - CRUD operations for project management
 - `/api/contacts` - Contact form submissions
 - `/api/demo-requests` - Demo request submissions and retrieval
-- `/api/stripe/*` - Stripe integration endpoints (webhook, billing portal, checkout)
-- `/api/mileage-logs` - Trucker mileage tracking
-- `/api/fuel-expenses` - Fuel expense management
-- `/api/maintenance-expenses` - Maintenance cost tracking
-- `/api/food-expenses` - Meal expense logging
-- `/api/paperwork` - Documentation management
-- `/api/subscription-tiers` - Trucker subscription pricing
-- `/api/subscriptions` - Trucker subscription management
+- `/api/stripe/*` - Stripe integration endpoints (webhook, billing portal, config)
 
 **Design Decisions**:
 - Monolithic server with routes defined in `server/routes.ts`
@@ -62,34 +52,20 @@ Build approach: Minimize credit usage; review as you go. Uses Autonomous mode fo
 **Database**: PostgreSQL (Neon serverless)
 - **Schema Management**: Drizzle Kit for migrations
 - **Core Tables**:
-  - `users` - Authentication (username/password) with Stripe customer linking and optional truckerClientId
+  - `users` - Authentication (username/password) with Stripe customer linking
   - `projects` - Project tracking with status, progress, due dates
   - `contacts` - Contact form inquiries
   - `demo_requests` - Demo request submissions with company details, timeline, budget, challenges, and notes
-  - Stripe sync tables (managed by `stripe-replit-sync` package)
-
-- **Trucker Expense Tracking Tables**:
-  - `truckerClients` - Trucker company information and subscription tier links
-  - `subscriptionTiers` - 3 subscription tiers (Basic, Professional, Enterprise) with 300% markup pricing
-  - `truckerSubscriptions` - Links trucker clients to subscription tiers with billing dates
-  - `mileageLogs` - Date, miles driven, and driver notes
-  - `fuelExpenses` - Gallons purchased, cost per gallon, total cost
-  - `maintenanceExpenses` - Date, description, and maintenance costs
-  - `foodExpenses` - Date, description, and meal expenses
-  - `paperworkDocuments` - Date, document type, and descriptions
 
 **Design Decisions**:
 - UUID primary keys using `gen_random_uuid()`
 - Connection pooling via `@neondatabase/serverless` for serverless compatibility
 - Schema defined in shared directory (`shared/schema.ts`) for type sharing between client/server
 - Seed script provides sample project data
-- Separate trucker subsystem with dedicated tables for data integrity and targeted management
 
 ### Authentication & Authorization
 
 **Current State**: Mock authentication (login redirects to dashboard without validation)
-
-**Trucker Portal**: Supports linking trucker clients to subscription tiers
 
 **Planned Architecture** (evident from user schema):
 - Username/password authentication
@@ -102,10 +78,10 @@ Build approach: Minimize credit usage; review as you go. Uses Autonomous mode fo
 
 **Payment Processing**:
 - **Stripe** - Subscription billing and payment processing
-  - Environment-based credential management via STRIPE_PUBLISHABLE_KEY and STRIPE_SECRET_KEY secrets
-  - Managed webhooks via `stripe-replit-sync` package
+  - Environment-based credential management via STRIPE_PUBLISHABLE_KEY and STRIPE_API_SECRET_KEY secrets
+  - Direct Stripe SDK usage (native `stripe` package)
   - Customer portal for subscription management
-  - Note: Stripe connector was dismissed; using secrets-based authentication instead
+  - Webhook handler ready (requires STRIPE_WEBHOOK_SECRET)
 
 **Infrastructure**:
 - **Neon Database** - Serverless PostgreSQL hosting
@@ -124,8 +100,6 @@ Build approach: Minimize credit usage; review as you go. Uses Autonomous mode fo
 - **TypeScript** - Type safety across entire stack
 - **PostCSS** - CSS processing with Tailwind and Autoprefixer
 - **Drizzle Kit** - Database migration management
-
-**Design Rationale for Stripe Integration**: The application uses `stripe-replit-sync` to automatically manage database schema for Stripe data synchronization, reducing manual webhook handling complexity. Managed webhooks ensure reliability across deployments.
 
 ## Feature: Demo Request Funnel
 
@@ -152,48 +126,12 @@ Build approach: Minimize credit usage; review as you go. Uses Autonomous mode fo
 
 **Database**: Separate `demo_requests` table maintains data integrity and enables targeted management
 
-## Feature: Trucker Expense Tracking System
+## Recent Changes
 
-**Overview**: Complete expense management solution for trucking professionals with three subscription tiers calculated at 300% markup (cost × 4).
-
-**Subscription Tiers**:
-1. **Basic Tier** - $116/month
-   - Mileage tracking
-   - Fuel expense logging
-   - Dashboard overview
-
-2. **Professional Tier** - $236/month (includes Basic +)
-   - Maintenance expense tracking
-   - Food/meal expense logging
-   - Monthly reports
-
-3. **Enterprise Tier** - $396/month (includes Professional +)
-   - Paperwork and documentation management
-   - Advanced analytics
-   - Full expense history and exports
-
-**Components**:
-- `TruckerDashboard.tsx` - Home page with expense summary and quick actions
-- `MileageTracking.tsx` - Log daily mileage with notes
-- `FuelExpenses.tsx` - Track fuel purchases and calculate costs
-- `MaintenanceTracking.tsx` - Record maintenance expenses
-- `FoodExpenses.tsx` - Track meal and food expenses
-- `PaperworkManagement.tsx` - Manage documentation and receipts
-- `SubscriptionManagement.tsx` - View subscription and upgrade options
-
-**Solutions Page Integration**:
-- Dedicated pricing menu section on Solutions page
-- Displays all 3 subscription tiers with feature comparison
-- Monthly pricing with 300% markup calculations
-- Call-to-action buttons for each tier
-
-**Database**: 8 dedicated trucker expense tables with full CRUD API support
-
-**API Endpoints**:
-- `GET/POST/PUT/DELETE /api/mileage-logs` - Mileage tracking
-- `GET/POST/PUT/DELETE /api/fuel-expenses` - Fuel management
-- `GET/POST/PUT/DELETE /api/maintenance-expenses` - Maintenance tracking
-- `GET/POST/PUT/DELETE /api/food-expenses` - Food expenses
-- `GET/POST/PUT/DELETE /api/paperwork` - Documentation
-- `GET /api/subscription-tiers` - Subscription tier information
-- `POST /api/subscriptions` - Create subscriptions
+- **2026-02-06**: Removed Trucker Expense Tracking System from this project (moved to separate project)
+  - Removed all trucker dashboard pages, API routes, database schema tables, and storage methods
+  - Removed AI extraction and object storage integrations (were trucker-specific)
+  - Cleaned Solutions page of trucker pricing section
+  - Export guide available in `TRUCKER_EXPORT_FILES.md` for rebuilding in separate project
+- **2026-01-04**: Switched from `stripe-replit-sync` to direct Stripe SDK usage
+  - Uses `STRIPE_API_SECRET_KEY` instead of `STRIPE_SECRET_KEY` (Replit integration was overwriting the key)

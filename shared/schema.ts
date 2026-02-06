@@ -9,8 +9,6 @@ export const users = pgTable("users", {
   password: text("password").notNull(),
   email: text("email"),
   stripeCustomerId: text("stripe_customer_id"),
-  truckerClientId: varchar("trucker_client_id"),
-  userType: text("user_type").notNull().default("standard"), // "standard" or "trucker"
 });
 
 export const projects = pgTable("projects", {
@@ -47,111 +45,6 @@ export const demoRequests = pgTable("demo_requests", {
   createdAt: date("createdAt").notNull().default(sql`CURRENT_DATE`),
 });
 
-// Trucker Expense Tracking System
-export const subscriptionTiers = pgTable("subscription_tiers", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  name: text("name").notNull(), // "Basic", "Professional", "Enterprise"
-  description: text("description").notNull(),
-  baseCostPerMonth: decimal("base_cost_per_month", { precision: 10, scale: 2 }).notNull(),
-  markupPercentage: decimal("markup_percentage", { precision: 5, scale: 2 }).notNull().default("300"), // 300% markup
-  finalPricePerMonth: decimal("final_price_per_month", { precision: 10, scale: 2 }).notNull(), // calculated price with markup
-  features: text("features").array().notNull(), // array of feature strings
-  order: integer("order").notNull(), // for sorting
-});
-
-export const truckerClients = pgTable("trucker_clients", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  companyName: text("company_name").notNull(),
-  contactPerson: text("contact_person"),
-  email: text("email").notNull(),
-  phone: text("phone"),
-  address: text("address"),
-  fleetSize: integer("fleet_size").default(1),
-  operationType: text("operation_type"), // "Owner-Operator", "Small Fleet", "Large Fleet"
-  trackingFeatures: text("tracking_features").array(), // selected features to track
-  subscriptionTierId: varchar("subscription_tier_id").notNull(),
-  subscriptionStartDate: date("subscription_start_date").notNull().default(sql`CURRENT_DATE`),
-  isActive: boolean("is_active").notNull().default(true),
-  createdAt: timestamp("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
-});
-
-export const mileageLogs = pgTable("mileage_logs", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  truckerClientId: varchar("trucker_client_id").notNull(),
-  logDate: date("log_date").notNull(),
-  milesDriven: decimal("miles_driven", { precision: 10, scale: 2 }).notNull(),
-  notes: text("notes"),
-  createdAt: timestamp("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
-});
-
-export const fuelExpenses = pgTable("fuel_expenses", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  truckerClientId: varchar("trucker_client_id").notNull(),
-  expenseDate: date("expense_date").notNull(),
-  gallons: decimal("gallons", { precision: 10, scale: 2 }).notNull(),
-  costPerGallon: decimal("cost_per_gallon", { precision: 10, scale: 2 }).notNull(),
-  totalCost: decimal("total_cost", { precision: 10, scale: 2 }).notNull(),
-  location: text("location"),
-  createdAt: timestamp("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
-});
-
-export const maintenanceExpenses = pgTable("maintenance_expenses", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  truckerClientId: varchar("trucker_client_id").notNull(),
-  expenseDate: date("expense_date").notNull(),
-  description: text("description").notNull(),
-  cost: decimal("cost", { precision: 10, scale: 2 }).notNull(),
-  category: text("category"), // "Oil Change", "Tire", "Repair", etc.
-  createdAt: timestamp("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
-});
-
-export const foodExpenses = pgTable("food_expenses", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  truckerClientId: varchar("trucker_client_id").notNull(),
-  expenseDate: date("expense_date").notNull(),
-  description: text("description").notNull(),
-  cost: decimal("cost", { precision: 10, scale: 2 }).notNull(),
-  location: text("location"),
-  createdAt: timestamp("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
-});
-
-export const paperworkDocuments = pgTable("paperwork_documents", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  truckerClientId: varchar("trucker_client_id").notNull(),
-  documentDate: date("document_date").notNull(),
-  documentType: text("document_type").notNull(), // "Invoice", "Receipt", "Report", etc.
-  description: text("description").notNull(),
-  fileUrl: text("file_url"),
-  createdAt: timestamp("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
-});
-
-// Receipt Image Storage - billable feature
-export const receiptImages = pgTable("receipt_images", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  truckerClientId: varchar("trucker_client_id").notNull(),
-  expenseType: text("expense_type").notNull(), // "fuel", "maintenance", "food", "mileage"
-  expenseId: varchar("expense_id"), // links to the specific expense record
-  objectPath: text("object_path").notNull(), // storage path
-  originalFileName: text("original_file_name"),
-  fileSizeBytes: integer("file_size_bytes"),
-  mimeType: text("mime_type"),
-  monthlyStorageCost: decimal("monthly_storage_cost", { precision: 10, scale: 4 }).notNull().default("0.05"), // $0.05/image/month
-  isActive: boolean("is_active").notNull().default(true),
-  createdAt: timestamp("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
-});
-
-// Storage billing summary per trucker client
-export const storageBilling = pgTable("storage_billing", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  truckerClientId: varchar("trucker_client_id").notNull(),
-  billingMonth: date("billing_month").notNull(), // first day of the billing month
-  totalImages: integer("total_images").notNull().default(0),
-  totalStorageMb: decimal("total_storage_mb", { precision: 10, scale: 2 }).notNull().default("0"),
-  totalCost: decimal("total_cost", { precision: 10, scale: 2 }).notNull().default("0"),
-  isPaid: boolean("is_paid").notNull().default(false),
-  createdAt: timestamp("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
-});
-
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -171,51 +64,6 @@ export const insertDemoRequestSchema = createInsertSchema(demoRequests).omit({
   createdAt: true,
 });
 
-// Trucker Expense Tracking Schemas
-export const insertSubscriptionTierSchema = createInsertSchema(subscriptionTiers).omit({
-  id: true,
-});
-
-export const insertTruckerClientSchema = createInsertSchema(truckerClients).omit({
-  id: true,
-  createdAt: true,
-});
-
-export const insertMileageLogSchema = createInsertSchema(mileageLogs).omit({
-  id: true,
-  createdAt: true,
-});
-
-export const insertFuelExpenseSchema = createInsertSchema(fuelExpenses).omit({
-  id: true,
-  createdAt: true,
-});
-
-export const insertMaintenanceExpenseSchema = createInsertSchema(maintenanceExpenses).omit({
-  id: true,
-  createdAt: true,
-});
-
-export const insertFoodExpenseSchema = createInsertSchema(foodExpenses).omit({
-  id: true,
-  createdAt: true,
-});
-
-export const insertPaperworkDocumentSchema = createInsertSchema(paperworkDocuments).omit({
-  id: true,
-  createdAt: true,
-});
-
-export const insertReceiptImageSchema = createInsertSchema(receiptImages).omit({
-  id: true,
-  createdAt: true,
-});
-
-export const insertStorageBillingSchema = createInsertSchema(storageBilling).omit({
-  id: true,
-  createdAt: true,
-});
-
 // Types
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -225,25 +73,6 @@ export type InsertContact = z.infer<typeof insertContactSchema>;
 export type Contact = typeof contacts.$inferSelect;
 export type InsertDemoRequest = z.infer<typeof insertDemoRequestSchema>;
 export type DemoRequest = typeof demoRequests.$inferSelect;
-
-export type InsertSubscriptionTier = z.infer<typeof insertSubscriptionTierSchema>;
-export type SubscriptionTier = typeof subscriptionTiers.$inferSelect;
-export type InsertTruckerClient = z.infer<typeof insertTruckerClientSchema>;
-export type TruckerClient = typeof truckerClients.$inferSelect;
-export type InsertMileageLog = z.infer<typeof insertMileageLogSchema>;
-export type MileageLog = typeof mileageLogs.$inferSelect;
-export type InsertFuelExpense = z.infer<typeof insertFuelExpenseSchema>;
-export type FuelExpense = typeof fuelExpenses.$inferSelect;
-export type InsertMaintenanceExpense = z.infer<typeof insertMaintenanceExpenseSchema>;
-export type MaintenanceExpense = typeof maintenanceExpenses.$inferSelect;
-export type InsertFoodExpense = z.infer<typeof insertFoodExpenseSchema>;
-export type FoodExpense = typeof foodExpenses.$inferSelect;
-export type InsertPaperworkDocument = z.infer<typeof insertPaperworkDocumentSchema>;
-export type PaperworkDocument = typeof paperworkDocuments.$inferSelect;
-export type InsertReceiptImage = z.infer<typeof insertReceiptImageSchema>;
-export type ReceiptImage = typeof receiptImages.$inferSelect;
-export type InsertStorageBilling = z.infer<typeof insertStorageBillingSchema>;
-export type StorageBilling = typeof storageBilling.$inferSelect;
 
 // Re-export chat schema for AI integrations
 export * from "./models/chat";
