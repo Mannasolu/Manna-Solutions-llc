@@ -128,10 +128,8 @@ Build approach: Minimize credit usage; review as you go. Uses Autonomous mode fo
 
 ## Recent Changes
 
-- **2026-02-06**: Removed Trucker Expense Tracking System from this project (moved to separate project)
-  - Removed all trucker dashboard pages, API routes, database schema tables, and storage methods
-  - Removed AI extraction and object storage integrations (were trucker-specific)
-  - Cleaned Solutions page of trucker pricing section
-  - Export guide available in `TRUCKER_EXPORT_FILES.md` for rebuilding in separate project
+- **2026-02-06**: Removed Trucker Expense Tracking System from this project
+  - Removed all trucker dashboard pages, API routes, database schema tables, storage methods, seed data, and export guide
+  - Removed AI extraction and object storage integrations
 - **2026-01-04**: Switched from `stripe-replit-sync` to direct Stripe SDK usage
   - Uses `STRIPE_API_SECRET_KEY` instead of `STRIPE_SECRET_KEY` (Replit integration was overwriting the key)
