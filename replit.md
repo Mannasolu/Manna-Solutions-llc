@@ -4,7 +4,7 @@
 
 Manna Solutions LLC is a full-stack web application combining a public-facing marketing website with a client portal for an AI/ML solutions company. The platform showcases the company's AI/ML services (Predictive Analytics, NLP, Computer Vision, ML Ops) while providing authenticated clients with project management, document sharing, and billing capabilities.
 
-The application uses a modern monorepo structure with React/Vite for the frontend, Express for the backend, and PostgreSQL (via Neon) for data persistence. It integrates Stripe for payment processing and subscription management.
+The application uses a modern monorepo structure with React/Vite for the frontend, Express for the backend, and PostgreSQL (via Neon) for data persistence.
 
 ## User Preferences
 
@@ -39,7 +39,6 @@ Build approach: Minimize credit usage; review as you go. Uses Autonomous mode fo
 - `/api/projects` - CRUD operations for project management
 - `/api/contacts` - Contact form submissions
 - `/api/demo-requests` - Demo request submissions and retrieval
-- `/api/stripe/*` - Stripe integration endpoints (webhook, billing portal, config)
 
 **Design Decisions**:
 - Monolithic server with routes defined in `server/routes.ts`
@@ -52,7 +51,7 @@ Build approach: Minimize credit usage; review as you go. Uses Autonomous mode fo
 **Database**: PostgreSQL (Neon serverless)
 - **Schema Management**: Drizzle Kit for migrations
 - **Core Tables**:
-  - `users` - Authentication (username/password) with Stripe customer linking
+  - `users` - Authentication (username/password)
   - `projects` - Project tracking with status, progress, due dates
   - `contacts` - Contact form inquiries
   - `demo_requests` - Demo request submissions with company details, timeline, budget, challenges, and notes
@@ -75,13 +74,6 @@ Build approach: Minimize credit usage; review as you go. Uses Autonomous mode fo
 **Design Rationale**: Authentication system is stubbed to allow client portal UI development while deferring complex security implementation.
 
 ### External Dependencies
-
-**Payment Processing**:
-- **Stripe** - Subscription billing and payment processing
-  - Environment-based credential management via STRIPE_PUBLISHABLE_KEY and STRIPE_API_SECRET_KEY secrets
-  - Direct Stripe SDK usage (native `stripe` package)
-  - Customer portal for subscription management
-  - Webhook handler ready (requires STRIPE_WEBHOOK_SECRET)
 
 **Infrastructure**:
 - **Neon Database** - Serverless PostgreSQL hosting
@@ -128,10 +120,14 @@ Build approach: Minimize credit usage; review as you go. Uses Autonomous mode fo
 
 ## Recent Changes
 
+- **2026-02-06**: Removed Stripe payment integration
+  - Removed stripe package, stripeClient.ts, webhookHandlers.ts
+  - Removed Stripe API routes (billing portal, config, webhooks)
+  - Removed stripeCustomerId from users schema
+  - Cleaned Settings page to remove payment method card
+  - Removed orphaned chat model (shared/models/)
 - **2026-02-06**: Removed Trucker Expense Tracking System and cleaned up unused dependencies
   - Removed all trucker dashboard pages, API routes, database schema tables, storage methods, seed data, and export guide
   - Removed AI extraction and object storage integrations
   - Removed unused packages: @google-cloud/storage, @google/genai, google-auth-library, stripe-replit-sync, @uppy/*, p-limit, p-retry
   - Removed orphaned ObjectUploader component and use-upload hook
-- **2026-01-04**: Switched from `stripe-replit-sync` to direct Stripe SDK usage
-  - Uses `STRIPE_API_SECRET_KEY` instead of `STRIPE_SECRET_KEY` (Replit integration was overwriting the key)

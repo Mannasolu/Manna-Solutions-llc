@@ -31,16 +31,6 @@ Create a `.env` file in the project root with the following variables:
 |------------------|--------------------------------------------------|
 | `SESSION_SECRET` | Any random string used for session security      |
 
-### Optional (for payment features)
-
-| Variable                 | Description                                              |
-|--------------------------|----------------------------------------------------------|
-| `STRIPE_PUBLISHABLE_KEY` | Your Stripe publishable key (from [Stripe Dashboard](https://dashboard.stripe.com/apikeys)) |
-| `STRIPE_API_SECRET_KEY`  | Your Stripe secret key                                   |
-| `STRIPE_WEBHOOK_SECRET`  | For processing Stripe webhook events                     |
-
-Payment-related features will not function without the Stripe keys configured. The app will still start and run without them.
-
 ### Not Needed Locally
 
 The following environment variables are Replit-specific integrations and are **not required** for local development:
@@ -116,9 +106,7 @@ npm start
 ├── server/                 # Backend Express server
 │   ├── index.ts            # Server entry point
 │   ├── routes.ts           # API routes
-│   ├── storage.ts          # Database operations (Drizzle ORM)
-│   ├── stripeClient.ts     # Stripe SDK configuration
-│   └── webhookHandlers.ts  # Stripe webhook processing
+│   └── storage.ts          # Database operations (Drizzle ORM)
 ├── shared/                 # Shared between client and server
 │   └── schema.ts           # Database schema (Drizzle)
 ├── script/
@@ -148,7 +136,6 @@ npm start
 - Express 4
 - Drizzle ORM + Drizzle Kit (database ORM and migrations)
 - @neondatabase/serverless (PostgreSQL driver)
-- Stripe SDK (payment processing)
 - Passport.js (authentication - partially implemented)
 - express-session (session management)
 

@@ -8,7 +8,6 @@ export const users = pgTable("users", {
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
   email: text("email"),
-  stripeCustomerId: text("stripe_customer_id"),
 });
 
 export const projects = pgTable("projects", {
@@ -73,6 +72,3 @@ export type InsertContact = z.infer<typeof insertContactSchema>;
 export type Contact = typeof contacts.$inferSelect;
 export type InsertDemoRequest = z.infer<typeof insertDemoRequestSchema>;
 export type DemoRequest = typeof demoRequests.$inferSelect;
-
-// Re-export chat schema for AI integrations
-export * from "./models/chat";
